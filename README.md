@@ -9,7 +9,7 @@
 - 响应式、纯静态、可直接双击打开看
 
 > **状态：已上线** → <https://imzhurui.github.io>
-> 本机更新方式：改完文件后运行 `_tools\push.ps1 "改了什么"`（工作区内已备好便携版 git，走 `ssh.github.com:443`，无需另装 Git）。
+> 本机更新方式：改完文件后双击 `_tools\push.cmd`（或运行 `push.cmd "改了什么"`）。工作区内已备好便携版 git，走 `ssh.github.com:443`，不需要另装 Git。
 
 ---
 
