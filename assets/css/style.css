@@ -283,6 +283,32 @@ a:hover { color: var(--accent); }
 }
 .now dd { margin: 0; }
 
+
+/* 在读 */
+.reading { list-style: none; margin: 0; padding: 0; }
+.reading li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px dashed var(--rule);
+  flex-wrap: wrap;
+}
+.reading li:last-child { border-bottom: 0; }
+.reading a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.reading a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.read-meta {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
 /* 文章列表 */
 .posts { list-style: none; margin: 0; padding: 0; }
 .posts li { border-top: 1px solid var(--rule); }
