@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>页面走丢了 · Rui Zhu</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b6ef6'/%3E%3Ctext x='16' y='22' font-size='17' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<main id="main">
+  <div class="wrap" style="padding: 14vh 0; max-width: 640px;">
+    <p class="eyebrow">404</p>
+    <h1 class="hero-title" style="font-size: clamp(38px, 8vw, 64px);">这个页面不存在</h1>
+    <p class="hero-lead">可能是链接过期了，也可能是我把它删了。回首页看看吧。</p>
+    <p class="hero-actions">
+      <a class="btn btn-primary" href="/">回到首页</a>
+      <a class="btn btn-ghost" href="/blog/">读文章</a>
+    </p>
+  </div>
+</main>
+</body>
+</html>

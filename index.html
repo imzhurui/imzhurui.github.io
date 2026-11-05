@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rui Zhu · 个人主页</title>
+<meta name="description" content="Rui Zhu 的个人主页：项目、文章与联系方式。">
+<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rui Zhu · 个人主页">
+<meta property="og:description" content="Rui Zhu 的个人主页：项目、文章与联系方式。">
+<!-- 部署后把下面这行的地址换成你的真实网址 -->
+<link rel="canonical" href="https://imzhurui.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b6ef6'/%3E%3Ctext x='16' y='22' font-size='17' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>
+  /* 尽早设置主题，避免刷新时闪白 */
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">R</span>
+      <span>Rui Zhu</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#about">关于</a>
+      <a href="#work">作品</a>
+      <a href="blog/index.html">文章</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="切换深色 / 浅色模式">
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <p class="eyebrow">你好，我是</p>
+      <h1 class="hero-title">Rui Zhu</h1>
+      <p class="hero-lead">
+        在这里存放我的项目、笔记和一些折腾的记录。<br>
+        白天写代码，晚上写点字。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#work">看看我在做什么</a>
+        <a class="btn btn-ghost" href="blog/index.html">读读文章</a>
+      </div>
+      <ul class="socials" aria-label="社交链接">
+        <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="mailto:you@example.com">Email</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="wrap">
+      <h2 class="section-title">关于</h2>
+      <div class="about-grid">
+        <div>
+          <p>
+            我是一名<strong>独立开发者 / 学生 / 折腾爱好者</strong>（挑一个改成你的）。
+            平时喜欢把想法尽快做成能跑的东西，再把过程写下来。
+          </p>
+          <p>
+            这个站点是我在互联网上的一小块自留地：没有算法推荐，没有广告，
+            只有我想留下的东西。它由 GitHub Pages 托管，源码就在我的仓库里，
+            你可以随时把它抄走改成自己的。
+          </p>
+        </div>
+        <aside class="card fact-card">
+          <h3>快速了解</h3>
+          <dl class="facts">
+            <div><dt>所在地</dt><dd>中国 · 某座城市</dd></div>
+            <div><dt>在做的事</dt><dd>写代码、读闲书</dd></div>
+            <div><dt>正在学</dt><dd>把想法变成产品</dd></div>
+            <div><dt>联系我</dt><dd>邮件最快</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">作品</h2>
+        <p class="section-sub">一些做过的东西，点进去看细节。</p>
+      </div>
+      <div class="cards">
+        <article class="card project">
+          <div class="project-top">
+            <span class="chip">Web</span>
+            <span class="project-year">2026</span>
+          </div>
+          <h3>项目名称一</h3>
+          <p>一句话说清它解决了什么问题。比如：一个把零散笔记整理成周报的小工具，输入 Markdown，输出排版好的 PDF。</p>
+          <ul class="tags"><li>JavaScript</li><li>Vite</li></ul>
+          <a class="link-arrow" href="#" aria-label="查看项目名称一">查看项目 <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card project">
+          <div class="project-top">
+            <span class="chip">工具</span>
+            <span class="project-year">2025</span>
+          </div>
+          <h3>项目名称二</h3>
+          <p>再写一个。重点是「我为什么要做它」加「它现在能干什么」，别写成简历条目。</p>
+          <ul class="tags"><li>Python</li><li>CLI</li></ul>
+          <a class="link-arrow" href="#" aria-label="查看项目名称二">查看项目 <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card project">
+          <div class="project-top">
+            <span class="chip">写作</span>
+            <span class="project-year">持续</span>
+          </div>
+          <h3>项目名称三</h3>
+          <p>可以是一个长期维护的仓库、一份清单、一个开源贡献列表。没有也可以直接删掉这张卡片。</p>
+          <ul class="tags"><li>Markdown</li><li>文档</li></ul>
+          <a class="link-arrow" href="#" aria-label="查看项目名称三">查看项目 <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="writing" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">最近写的</h2>
+        <a class="link-arrow" href="blog/index.html">全部文章 <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="cards cards-2">
+        <article class="card post-card">
+          <p class="post-meta"><time datetime="2026-11-05">2026 年 11 月 5 日</time> · 随笔</p>
+          <h3><a href="blog/hello-world.html">我为什么要有一个自己的网站</a></h3>
+          <p>社交平台上的内容属于平台，只有自己的域名和仓库是自己的。这篇写我决定动手的原因。</p>
+        </article>
+        <article class="card post-card">
+          <p class="post-meta"><time datetime="2026-11-01">2026 年 11 月 1 日</time> · 教程</p>
+          <h3><a href="blog/github-pages-notes.html">GitHub Pages 是怎么工作的</a></h3>
+          <p>把一堆文件 push 上去，几分钟后就有了网址——中间发生了什么？顺便讲讲怎么少踩坑。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="wrap">
+      <div class="contact-box">
+        <h2 class="section-title">聊聊？</h2>
+        <p>有项目想合作、有问题想问，或者只是想打个招呼，都欢迎。</p>
+        <p class="contact-actions">
+          <a class="btn btn-primary" href="mailto:you@example.com">发邮件给我</a>
+          <a class="btn btn-ghost" href="https://github.com/" target="_blank" rel="noopener noreferrer">在 GitHub 上找我</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>© <span id="year">2026</span> Rui Zhu · 由 GitHub Pages 托管</p>
+    <p class="footer-note">用 HTML 和一点点 CSS 手写，没有构建步骤。</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
