@@ -152,6 +152,12 @@ a:hover { color: var(--accent); }
   color: var(--muted);
 }
 
+.season-mark {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
 .brand {
   margin: 0 0 0.5rem;
   font-size: 2.15rem;
@@ -460,16 +466,79 @@ a:hover { color: var(--accent); }
 
 /* ---------------- 四季：只换底色和光，不动文字 ---------------- */
 
-/* 四季只在蓝紫范围里换「光」，底色永远是浅蓝到浅紫 */
-[data-season="spring"] { --glow-blue: rgba(96, 200, 210, 0.18); --glow-violet: rgba(150, 190, 255, 0.14); }
-[data-season="summer"] { --glow-blue: rgba(72, 156, 255, 0.20); --glow-violet: rgba(120, 190, 255, 0.13); }
-[data-season="autumn"] { --glow-blue: rgba(126, 146, 255, 0.18); --glow-violet: rgba(176, 132, 255, 0.17); }
-[data-season="winter"] { --glow-blue: rgba(150, 190, 255, 0.20); --glow-violet: rgba(196, 208, 255, 0.15); }
+/* ---------------- 四季：底色、光、强调色都换 ---------------- */
 
-[data-theme="dark"][data-season="spring"] { --glow-blue: rgba(60, 180, 200, 0.22); --glow-violet: rgba(110, 150, 255, 0.20); }
-[data-theme="dark"][data-season="summer"] { --glow-blue: rgba(56, 132, 255, 0.26); --glow-violet: rgba(96, 176, 255, 0.20); }
-[data-theme="dark"][data-season="autumn"] { --glow-blue: rgba(104, 124, 255, 0.24); --glow-violet: rgba(158, 108, 255, 0.24); }
-[data-theme="dark"][data-season="winter"] { --glow-blue: rgba(130, 176, 255, 0.24); --glow-violet: rgba(180, 196, 255, 0.18); }
+[data-season="spring"] {
+  --paper: #fff6f9;
+  --paper-2: #f4ecfb;
+  --accent: #b8467e;
+  --accent-soft: rgba(184, 70, 126, 0.08);
+  --glow-blue: rgba(255, 158, 196, 0.26);
+  --glow-violet: rgba(188, 152, 255, 0.22);
+}
+
+[data-season="summer"] {
+  --paper: #f2fbff;
+  --paper-2: #e9f2ff;
+  --accent: #2f6fd0;
+  --accent-soft: rgba(47, 111, 208, 0.08);
+  --glow-blue: rgba(86, 196, 255, 0.26);
+  --glow-violet: rgba(96, 146, 255, 0.20);
+}
+
+[data-season="autumn"] {
+  --paper: #f7f4ff;
+  --paper-2: #eee7fb;
+  --accent: #6a4bd6;
+  --accent-soft: rgba(106, 75, 214, 0.08);
+  --glow-blue: rgba(124, 112, 255, 0.24);
+  --glow-violet: rgba(176, 120, 255, 0.22);
+}
+
+[data-season="winter"] {
+  --paper: #f4f9ff;
+  --paper-2: #ecf1fb;
+  --accent: #3f7fb8;
+  --accent-soft: rgba(63, 127, 184, 0.08);
+  --glow-blue: rgba(150, 200, 255, 0.28);
+  --glow-violet: rgba(186, 198, 255, 0.20);
+}
+
+[data-theme="dark"][data-season="spring"] {
+  --paper: #1b1420;
+  --paper-2: #241a2c;
+  --accent: #ff9ec4;
+  --accent-soft: rgba(255, 158, 196, 0.14);
+  --glow-blue: rgba(255, 130, 180, 0.26);
+  --glow-violet: rgba(170, 120, 255, 0.24);
+}
+
+[data-theme="dark"][data-season="summer"] {
+  --paper: #0d1826;
+  --paper-2: #102132;
+  --accent: #7fd0ff;
+  --accent-soft: rgba(127, 208, 255, 0.14);
+  --glow-blue: rgba(60, 180, 255, 0.28);
+  --glow-violet: rgba(90, 140, 255, 0.22);
+}
+
+[data-theme="dark"][data-season="autumn"] {
+  --paper: #14112a;
+  --paper-2: #1a1738;
+  --accent: #b39cff;
+  --accent-soft: rgba(179, 156, 255, 0.16);
+  --glow-blue: rgba(110, 100, 255, 0.30);
+  --glow-violet: rgba(160, 110, 255, 0.28);
+}
+
+[data-theme="dark"][data-season="winter"] {
+  --paper: #0e1622;
+  --paper-2: #131f2e;
+  --accent: #9ec4ff;
+  --accent-soft: rgba(158, 196, 255, 0.14);
+  --glow-blue: rgba(140, 190, 255, 0.28);
+  --glow-violet: rgba(180, 196, 255, 0.20);
+}
 
 /* ---------------- 响应式 ---------------- */
 

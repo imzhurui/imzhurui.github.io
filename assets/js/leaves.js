@@ -24,23 +24,23 @@
   var CFG = {
     sakura: {
       colors: ['#f7c6d5', '#fbdce6', '#f2b3c7', '#fde9f0', '#f9d2de'],
-      size: [3, 6], vy: [0.12, 0.34], sway: [16, 46], alpha: [0.55, 0.9],
-      step: 120, min: 9, max: 16
+      size: [4, 8], vy: [0.12, 0.34], sway: [16, 46], alpha: [0.6, 0.95],
+      step: 95, min: 12, max: 22
     },
     firefly: {
       colors: ['#ffe9a8', '#e9ffb4', '#fff4c8'],
-      size: [1.2, 2.4], vy: [0.02, 0.10], sway: [0, 0], alpha: [0.5, 1],
-      step: 165, min: 7, max: 13
+      size: [1.4, 2.8], vy: [0.02, 0.10], sway: [0, 0], alpha: [0.6, 1],
+      step: 135, min: 9, max: 17
     },
     leaf: {
       colors: ['#c98c63', '#d3a173', '#b57c55', '#c07a5e', '#a98a6a'],
-      size: [4, 9], vy: [0.15, 0.45], sway: [10, 38], alpha: [0.14, 0.34],
-      step: 135, min: 6, max: 14
+      size: [5, 11], vy: [0.15, 0.45], sway: [10, 38], alpha: [0.2, 0.42],
+      step: 110, min: 9, max: 18
     },
     snow: {
       colors: ['#ffffff', '#eef5ff', '#dbe8fb'],
-      size: [1.5, 3.6], vy: [0.25, 0.8], sway: [8, 26], alpha: [0.6, 0.95],
-      step: 110, min: 12, max: 22
+      size: [2, 4.6], vy: [0.25, 0.8], sway: [8, 26], alpha: [0.7, 1],
+      step: 85, min: 16, max: 30
     }
   };
 

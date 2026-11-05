@@ -67,6 +67,18 @@
       seasonBtn.textContent = '季节 · ' + SEASON_LABEL[real] + (next === 'auto' ? '（自动）' : '');
       seasonBtn.setAttribute('aria-label', '切换季节，现在是' + SEASON_LABEL[real]);
     }
+
+    var kicker = document.querySelector('.kicker');
+    if (kicker) {
+      var mark = kicker.querySelector('.season-mark');
+      if (!mark) {
+        kicker.appendChild(document.createTextNode(' · '));
+        mark = document.createElement('span');
+        mark.className = 'season-mark';
+        kicker.appendChild(mark);
+      }
+      mark.textContent = SEASON_LABEL[real];
+    }
   }
 
   applySeason(pref);
