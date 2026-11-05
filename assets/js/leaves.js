@@ -18,7 +18,6 @@
   var lastT = 0;
   var resizeTimer = null;
 
-  // 秋天的一组低饱和颜色
   var PALETTE = ['#b8693c', '#c78e50', '#9a7442', '#a9482c', '#7c8352', '#cba46b'];
 
   function rand(a, b) { return a + Math.random() * (b - a); }
@@ -28,21 +27,21 @@
       baseX: rand(0, W),
       x: 0,
       y: spread ? rand(-H, H) : rand(-H * 0.6, -20),
-      size: rand(5, 11),
-      vy: rand(0.18, 0.55),
-      sway: rand(12, 42),
+      size: rand(4, 9),
+      vy: rand(0.15, 0.45),
+      sway: rand(12, 38),
       phase: rand(0, Math.PI * 2),
       spin: rand(0, Math.PI * 2),
-      spinV: rand(0.004, 0.014),
+      spinV: rand(0.004, 0.012),
       rot: rand(0, Math.PI * 2),
-      rotV: rand(-0.006, 0.006),
-      alpha: rand(0.28, 0.6),
+      rotV: rand(-0.005, 0.005),
+      alpha: rand(0.16, 0.4),
       color: PALETTE[Math.floor(Math.random() * PALETTE.length)]
     };
   }
 
   function targetCount() {
-    return Math.max(7, Math.min(16, Math.round(W / 100)));
+    return Math.max(6, Math.min(13, Math.round(W / 140)));
   }
 
   function resize() {
@@ -66,7 +65,7 @@
     ctx.globalAlpha = l.alpha;
     ctx.translate(l.x, l.y);
     ctx.rotate(l.rot);
-    ctx.scale(Math.cos(l.spin), 1); // 翻面，像叶子在打转
+    ctx.scale(Math.cos(l.spin), 1);
 
     ctx.beginPath();
     ctx.moveTo(0, -s);
@@ -75,11 +74,10 @@
     ctx.fillStyle = l.color;
     ctx.fill();
 
-    // 叶脉
     ctx.beginPath();
     ctx.moveTo(0, -s * 0.78);
     ctx.quadraticCurveTo(s * 0.12, 0, 0, s * 0.78);
-    ctx.strokeStyle = 'rgba(255, 250, 240, 0.35)';
+    ctx.strokeStyle = 'rgba(255, 250, 240, 0.3)';
     ctx.lineWidth = 0.7;
     ctx.stroke();
 
@@ -102,11 +100,11 @@
       l.x = l.baseX + Math.sin(t * 0.00045 + l.phase) * l.sway;
 
       if (l.y - l.size > H) {
-        l.y = -l.size - rand(20, 180);
+        l.y = -l.size - rand(20, 160);
         l.baseX = rand(-20, W + 20);
-        l.alpha = rand(0.28, 0.6);
-        l.size = rand(5, 11);
-        l.vy = rand(0.18, 0.55);
+        l.alpha = rand(0.16, 0.4);
+        l.size = rand(4, 9);
+        l.vy = rand(0.15, 0.45);
       }
 
       drawLeaf(l);
