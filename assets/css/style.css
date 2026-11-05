@@ -4,31 +4,32 @@
    =========================================================== */
 
 :root {
-  --paper: #ffffff;
-  --paper-2: #f4f5f6;
-  --ink: #17181a;
-  --muted: #6a6f76;
-  --rule: #e5e6e9;
-  --accent: #a83c2c;
-  --accent-soft: rgba(168, 60, 44, 0.07);
-  --glow: rgba(120, 132, 152, 0.07);
-  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong",
-    "SimSun", Georgia, "Times New Roman", serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --paper: #f6f9ff;
+  --paper-2: #f4f1fd;
+  --ink: #1a1b2e;
+  --muted: #63667f;
+  --rule: #e3e6f3;
+  --accent: #5b4bd6;
+  --accent-soft: rgba(91, 75, 214, 0.08);
+  --glow-blue: rgba(86, 138, 255, 0.18);
+  --glow-violet: rgba(158, 118, 255, 0.16);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --sans: var(--font);
   --side: 16.5rem;
   color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --paper: #121315;
-  --paper-2: #17181b;
-  --ink: #e6e7e9;
-  --muted: #9aa0a6;
-  --rule: #2a2c30;
-  --accent: #e07b60;
-  --accent-soft: rgba(224, 123, 96, 0.12);
-  --glow: rgba(120, 132, 152, 0.10);
+  --paper: #0f1120;
+  --paper-2: #141128;
+  --ink: #e7e8f4;
+  --muted: #9b9db8;
+  --rule: #262a40;
+  --accent: #a99cff;
+  --accent-soft: rgba(169, 156, 255, 0.14);
+  --glow-blue: rgba(72, 112, 255, 0.22);
+  --glow-violet: rgba(142, 100, 255, 0.20);
   color-scheme: dark;
 }
 
@@ -47,11 +48,12 @@ body {
   min-height: 100vh;
   background-color: var(--paper);
   background-image:
-    radial-gradient(1000px 560px at 82% -12%, var(--glow), transparent 62%),
-    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    radial-gradient(900px 520px at 86% -10%, var(--glow-blue), transparent 60%),
+    radial-gradient(820px 480px at 2% 106%, var(--glow-violet), transparent 62%),
+    linear-gradient(160deg, var(--paper) 0%, var(--paper-2) 100%);
   background-attachment: fixed;
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--font);
   font-size: 17px;
   line-height: 1.9;
   -webkit-font-smoothing: antialiased;
@@ -65,7 +67,7 @@ body::before {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.12;
+  opacity: 0.08;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
@@ -458,16 +460,16 @@ a:hover { color: var(--accent); }
 
 /* ---------------- 四季：只换底色和光，不动文字 ---------------- */
 
-/* 底色统一保持中性白，只让「光」和飘落的粒子随季节变 */
-[data-season="spring"] { --paper-2: #f4f5f5; --glow: rgba(116, 178, 138, 0.12); }
-[data-season="summer"] { --paper-2: #f3f5f7; --glow: rgba(92, 150, 210, 0.12); }
-[data-season="autumn"] { --paper-2: #f5f4f2; --glow: rgba(190, 138, 110, 0.10); }
-[data-season="winter"] { --paper-2: #f2f4f7; --glow: rgba(122, 150, 196, 0.14); }
+/* 四季只在蓝紫范围里换「光」，底色永远是浅蓝到浅紫 */
+[data-season="spring"] { --glow-blue: rgba(96, 200, 210, 0.18); --glow-violet: rgba(150, 190, 255, 0.14); }
+[data-season="summer"] { --glow-blue: rgba(72, 156, 255, 0.20); --glow-violet: rgba(120, 190, 255, 0.13); }
+[data-season="autumn"] { --glow-blue: rgba(126, 146, 255, 0.18); --glow-violet: rgba(176, 132, 255, 0.17); }
+[data-season="winter"] { --glow-blue: rgba(150, 190, 255, 0.20); --glow-violet: rgba(196, 208, 255, 0.15); }
 
-[data-theme="dark"][data-season="spring"] { --paper-2: #151a17; --glow: rgba(90, 150, 110, 0.16); }
-[data-theme="dark"][data-season="summer"] { --paper-2: #14191d; --glow: rgba(70, 130, 180, 0.18); }
-[data-theme="dark"][data-season="autumn"] { --paper-2: #1a1714; --glow: rgba(180, 120, 70, 0.16); }
-[data-theme="dark"][data-season="winter"] { --paper-2: #14181e; --glow: rgba(110, 140, 190, 0.18); }
+[data-theme="dark"][data-season="spring"] { --glow-blue: rgba(60, 180, 200, 0.22); --glow-violet: rgba(110, 150, 255, 0.20); }
+[data-theme="dark"][data-season="summer"] { --glow-blue: rgba(56, 132, 255, 0.26); --glow-violet: rgba(96, 176, 255, 0.20); }
+[data-theme="dark"][data-season="autumn"] { --glow-blue: rgba(104, 124, 255, 0.24); --glow-violet: rgba(158, 108, 255, 0.24); }
+[data-theme="dark"][data-season="winter"] { --glow-blue: rgba(130, 176, 255, 0.24); --glow-violet: rgba(180, 196, 255, 0.18); }
 
 /* ---------------- 响应式 ---------------- */
 

@@ -45,7 +45,7 @@
     } else {
       size = rand(4, 9);
       vy = rand(0.15, 0.45);
-      alpha = rand(0.16, 0.4);
+      alpha = rand(0.12, 0.32);
     }
 
     return {
