@@ -43,7 +43,7 @@
     a.className = 'post-item';
     a.href = post.url;
 
-    var meta = document.createElement('p');
+    var meta = document.createElement('span');
     meta.className = 'post-meta';
     meta.textContent = post.date + ' · ' + post.tag;
 

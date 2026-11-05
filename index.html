@@ -3,18 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>祝蕊 · 个人主页</title>
-<meta name="description" content="祝蕊（Zhu Rui）的个人主页：山东大学网络空间安全学院密码科学与技术 2024 级，在青岛，关注 AI 隐私保护的密码学。">
-<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+<title>祝蕊</title>
+<meta name="description" content="祝蕊，山东大学网络空间安全学院密码科学与技术 2024 级，在青岛。关心 AI 隐私保护里的密码学。">
+<meta name="theme-color" content="#faf6ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
-<meta property="og:title" content="祝蕊 · 个人主页">
-<meta property="og:description" content="山东大学网络空间安全学院 · 密码科学与技术 2024 级。关注 AI 隐私保护的密码学研究。">
+<meta property="og:title" content="祝蕊">
+<meta property="og:description" content="山东大学 · 密码科学与技术 2024 级。关心 AI 隐私保护里的密码学。">
 <link rel="canonical" href="https://imzhurui.github.io/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b6ef6'/%3E%3Ctext x='16' y='22' font-size='17' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23a83c2c'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23faf6ef' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>
-  /* 尽早设置主题，避免刷新时闪白 */
   (function () {
     try {
       var saved = localStorage.getItem('theme');
@@ -27,16 +26,13 @@
 <body>
 <a class="skip-link" href="#main">跳到正文</a>
 
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="index.html">
-      <span class="brand-mark" aria-hidden="true">R</span>
-      <span>祝蕊</span>
-    </a>
-    <nav class="nav" aria-label="主导航">
+<header class="masthead">
+  <div class="col masthead-row">
+    <a class="name" href="index.html">祝蕊</a>
+    <nav class="links" aria-label="主导航">
+      <a href="#now">最近</a>
       <a href="#about">关于</a>
-      <a href="#work">在做的事</a>
-      <a href="blog/index.html">文章</a>
+      <a href="blog/index.html">文字</a>
       <a href="#contact">联系</a>
     </nav>
     <button class="theme-toggle" type="button" aria-label="切换深色 / 浅色模式">
@@ -47,144 +43,105 @@
 </header>
 
 <main id="main">
+  <div class="col">
 
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <p class="eyebrow">你好，我是</p>
-      <h1 class="hero-title">祝蕊</h1>
-      <p class="hero-lead">
-        山东大学网络空间安全学院 · 密码科学与技术 2024 级，在青岛。<br>
-        正在打基础，也在琢磨怎么用密码学守住 AI 里的那点隐私。
+    <section class="lede">
+      <h1>你好，我是祝蕊</h1>
+      <p>
+        山东大学网络空间安全学院，密码科学与技术 2024 级。现在在青岛校区读书。
       </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#work">看看我在做什么</a>
-        <a class="btn btn-ghost" href="blog/index.html">读读文章</a>
-      </div>
-      <ul class="socials" aria-label="社交链接">
-        <li><a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-        <li><a href="mailto:1702732426@qq.com">Email</a></li>
-      </ul>
-    </div>
-  </section>
+      <p>
+        说「喜欢密码学」可能还早了点儿。我到现在接触的都是基础——数论、代数、
+        几类经典的密码体制。但我确实被一个问题缠住了：<strong>数据要被拿去做模型，
+        又不想让数据本身出门</strong>。同态加密、安全多方计算、联邦学习里的隐私保护，
+        都在这个问题上做文章。等基础再扎实一点，我想往 AI 和隐私保护的交叉处走。
+      </p>
+      <p>
+        这个站点是我的笔记本。没打算做成作品集，只是把学过的东西写一遍——
+        写不出来的地方，就是还没真懂的地方。
+      </p>
+      <p class="signoff">
+        2026 年 11 月，于青岛
+        <span class="seal" aria-hidden="true">祝</span>
+      </p>
+    </section>
 
-  <section id="about" class="section">
-    <div class="wrap">
-      <h2 class="section-title">关于</h2>
-      <div class="about-grid">
+    <section id="now" class="block">
+      <h2 class="label">最近</h2>
+      <dl class="now">
         <div>
-          <p>
-            我是<strong>祝蕊</strong>，山东大学网络空间安全学院
-            <strong>密码科学与技术</strong>专业 2024 级的学生，现在在青岛读书。
-          </p>
-          <p>
-            对密码学的兴趣，来自一个很具体的问题：数据要拿来训练模型，
-            又不想把数据本身交出去。同态加密、安全多方计算、联邦学习里的隐私保护，
-            都是在回答它。我现在还在补数学和协议的基础，离做出像样的东西有距离，
-            但这个方向我想一直走下去。
-          </p>
-          <p>
-            这个站点是我的自留地：学到的东西、做过的尝试、想不明白的问题，
-            都先写在这里。
-          </p>
+          <dt>在做</dt>
+          <dd>上课、写这个网站、慢慢补数学</dd>
         </div>
-        <aside class="card fact-card">
-          <h3>快速了解</h3>
-          <dl class="facts">
-            <div><dt>所在地</dt><dd>中国 · 青岛</dd></div>
-            <div><dt>学校</dt><dd>山东大学</dd></div>
-            <div><dt>院系</dt><dd>网络空间安全学院</dd></div>
-            <div><dt>专业</dt><dd>密码科学与技术 · 24 级</dd></div>
-            <div><dt>关注方向</dt><dd>AI 隐私保护的密码学</dd></div>
-            <div><dt>联系</dt><dd>邮件最快</dd></div>
-          </dl>
-        </aside>
-      </div>
-    </div>
-  </section>
+        <div>
+          <dt>在读</dt>
+          <dd>课程教材，和几篇隐私计算的综述——读得很慢，一遍看不懂就两遍</dd>
+        </div>
+        <div>
+          <dt>在学</dt>
+          <dd>代数与数论。以前是背结论，现在想弄明白为什么</dd>
+        </div>
+        <div>
+          <dt>在想</dt>
+          <dd>那条线该画在哪里：模型要训练，数据又不能出门</dd>
+        </div>
+      </dl>
+    </section>
 
-  <section id="work" class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 class="section-title">在做的事</h2>
-        <p class="section-sub">还没什么成果，先把在走的路记下来。</p>
-      </div>
-      <div class="cards">
-        <article class="card project">
-          <div class="project-top">
-            <span class="chip">网站</span>
-            <span class="project-year">2026</span>
-          </div>
-          <h3>这个个人主页</h3>
-          <p>你正在看的页面。手写 HTML 和 CSS，没有构建步骤，托管在 GitHub Pages，改一行推一次就上线。</p>
-          <ul class="tags"><li>HTML</li><li>CSS</li><li>GitHub Pages</li></ul>
-          <a class="link-arrow" href="blog/github-pages-notes.html">它是怎么搭的 <span aria-hidden="true">→</span></a>
-        </article>
+    <section id="about" class="block">
+      <h2 class="label">关于</h2>
+      <p>
+        我是 2024 年进的山大。学院在青岛校区，离海很近，风大，冬天长，
+        正好适合坐在图书馆里推公式。
+      </p>
+      <p>
+        学到现在，最上瘾的是那种「看起来不可能，但确实做到了」的时刻——
+        比如两个人各自拿着一个数，互不知道对方的，却能一起算出一个结果，
+        而且谁也没多知道一点。这种事情在现实里一次次被做出来，我觉得很神奇。
+      </p>
+      <p>
+        除了密码学，我还在学怎么把想法写清楚。这个网站就是练习的一部分，
+        写得不好也先写着。
+      </p>
+    </section>
 
-        <article class="card project">
-          <div class="project-top">
-            <span class="chip">笔记</span>
-            <span class="project-year">持续</span>
-          </div>
-          <h3>密码学读书笔记</h3>
-          <p>把课上和论文里的推导自己重写一遍，用中文讲清楚。写不出来的地方，就是还没真懂的地方。</p>
-          <ul class="tags"><li>代数</li><li>数论</li><li>协议</li></ul>
-          <a class="link-arrow" href="blog/index.html">看写过的 <span aria-hidden="true">→</span></a>
-        </article>
+    <section id="writing" class="block">
+      <h2 class="label">文字</h2>
+      <ul class="post-list">
+        <li>
+          <a class="post-item" href="blog/hello-world.html">
+            <span class="post-meta">2026 年 11 月 5 日 · 随笔</span>
+            <h3>我为什么要有一个自己的网站</h3>
+          </a>
+        </li>
+        <li>
+          <a class="post-item" href="blog/github-pages-notes.html">
+            <span class="post-meta">2026 年 11 月 1 日 · 教程</span>
+            <h3>GitHub Pages 是怎么工作的</h3>
+          </a>
+        </li>
+      </ul>
+      <p class="more"><a href="blog/index.html">全部文章 →</a></p>
+    </section>
 
-        <article class="card project">
-          <div class="project-top">
-            <span class="chip">方向</span>
-            <span class="project-year">整理中</span>
-          </div>
-          <h3>AI 隐私保护里的密码学</h3>
-          <p>模型要训练、数据又不能明文出门。同态加密、安全多方计算、隐私集合求交……先把地图画出来，再挑一条走。</p>
-          <ul class="tags"><li>同态加密</li><li>MPC</li><li>隐私计算</li></ul>
-          <a class="link-arrow" href="#contact">一起聊聊 <span aria-hidden="true">→</span></a>
-        </article>
-      </div>
-    </div>
-  </section>
+    <section id="contact" class="block">
+      <h2 class="label">联系</h2>
+      <p>
+        邮件最快：<a href="mailto:1702732426@qq.com">1702732426@qq.com</a>。
+        也可以在 <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub</a> 上找我。
+      </p>
+      <p>
+        如果同校，邮件里说一声，可以约在青岛校区。
+      </p>
+    </section>
 
-  <section id="writing" class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 class="section-title">最近写的</h2>
-        <a class="link-arrow" href="blog/index.html">全部文章 <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="cards cards-2">
-        <article class="card post-card">
-          <p class="post-meta"><time datetime="2026-11-05">2026 年 11 月 5 日</time> · 随笔</p>
-          <h3><a href="blog/hello-world.html">我为什么要有一个自己的网站</a></h3>
-          <p>社交平台上的内容属于平台，只有自己的域名和仓库是自己的。这篇写我决定动手的原因。</p>
-        </article>
-        <article class="card post-card">
-          <p class="post-meta"><time datetime="2026-11-01">2026 年 11 月 1 日</time> · 教程</p>
-          <h3><a href="blog/github-pages-notes.html">GitHub Pages 是怎么工作的</a></h3>
-          <p>把一堆文件 push 上去，几分钟后就有了网址——中间发生了什么，顺便讲讲怎么少踩坑。</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="section">
-    <div class="wrap">
-      <div class="contact-box">
-        <h2 class="section-title">聊聊？</h2>
-        <p>想聊密码学、AI 隐私，或者只是想打个招呼，都欢迎。如果同校，邮件里说一声，可以约在青岛校区。</p>
-        <p class="contact-actions">
-          <a class="btn btn-primary" href="mailto:1702732426@qq.com">发邮件给我</a>
-          <a class="btn btn-ghost" href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">在 GitHub 上找我</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
+  </div>
 </main>
 
-<footer class="site-footer">
-  <div class="wrap footer-inner">
-    <p>© <span id="year">2026</span> 祝蕊 · 由 GitHub Pages 托管</p>
-    <p class="footer-note">用 HTML 和一点点 CSS 手写，没有构建步骤 · <span id="busuanzi_container_site_pv">总访问 <span id="busuanzi_value_site_pv">-</span> 次</span></p>
+<footer class="footer">
+  <div class="col footer-inner">
+    <p>© <span id="year">2026</span> 祝蕊 · 手写 HTML，没有构建步骤</p>
+    <p class="footer-note"><span id="busuanzi_container_site_pv">总访问 <span id="busuanzi_value_site_pv">-</span> 次</span></p>
   </div>
 </footer>
 
