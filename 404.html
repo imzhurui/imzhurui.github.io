@@ -13,6 +13,11 @@
       var saved = localStorage.getItem('theme');
       var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
     } catch (e) {}
   })();
 </script>

@@ -1,11 +1,14 @@
-/* 主题切换、页脚年份、滚动时轻轻浮起。没有依赖，没有构建。 */
+/* 主题、季节、页脚年份、滚动入场。没有依赖，没有构建。 */
 (function () {
   'use strict';
 
   var root = document.documentElement;
+
+  /* ---------------- 深浅色 ---------------- */
+
   var toggle = document.querySelector('.theme-toggle');
 
-  function apply(theme) {
+  function applyTheme(theme) {
     root.dataset.theme = theme;
     if (toggle) {
       toggle.setAttribute(
@@ -18,7 +21,7 @@
   if (toggle) {
     toggle.addEventListener('click', function () {
       var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      apply(next);
+      applyTheme(next);
       try {
         localStorage.setItem('theme', next);
       } catch (e) {}
@@ -27,17 +30,72 @@
 
   try {
     var mq = window.matchMedia('(prefers-color-scheme: dark)');
-    var onChange = function (e) {
+    var onThemeChange = function (e) {
       if (!localStorage.getItem('theme')) {
-        apply(e.matches ? 'dark' : 'light');
+        applyTheme(e.matches ? 'dark' : 'light');
       }
     };
-    if (mq.addEventListener) mq.addEventListener('change', onChange);
-    else if (mq.addListener) mq.addListener(onChange);
+    if (mq.addEventListener) mq.addEventListener('change', onThemeChange);
+    else if (mq.addListener) mq.addListener(onThemeChange);
   } catch (e) {}
+
+  /* ---------------- 季节 ---------------- */
+
+  var SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+  var SEASON_LABEL = { spring: '春', summer: '夏', autumn: '秋', winter: '冬' };
+
+  function autoSeason() {
+    var m = new Date().getMonth() + 1;
+    if (m >= 3 && m <= 5) return 'spring';
+    if (m >= 6 && m <= 8) return 'summer';
+    if (m >= 9 && m <= 11) return 'autumn';
+    return 'winter';
+  }
+
+  var seasonBtn = document.querySelector('.season-toggle');
+  var pref = 'auto';
+  try {
+    var saved = localStorage.getItem('season');
+    if (saved && (saved === 'auto' || SEASONS.indexOf(saved) >= 0)) pref = saved;
+  } catch (e) {}
+
+  function applySeason(next) {
+    pref = next;
+    var real = next === 'auto' ? autoSeason() : next;
+    root.dataset.season = real;
+    if (seasonBtn) {
+      seasonBtn.textContent = '季节 · ' + SEASON_LABEL[real] + (next === 'auto' ? '（自动）' : '');
+      seasonBtn.setAttribute('aria-label', '切换季节，现在是' + SEASON_LABEL[real]);
+    }
+  }
+
+  applySeason(pref);
+
+  if (seasonBtn) {
+    seasonBtn.addEventListener('click', function () {
+      var next;
+      if (pref === 'auto') next = 'spring';
+      else if (pref === 'spring') next = 'summer';
+      else if (pref === 'summer') next = 'autumn';
+      else if (pref === 'autumn') next = 'winter';
+      else next = 'auto';
+      applySeason(next);
+      try {
+        localStorage.setItem('season', next);
+      } catch (e) {}
+      // 通知粒子层换季节
+      document.dispatchEvent(
+        new CustomEvent('seasonchange', { detail: { season: root.dataset.season } })
+      );
+    });
+  }
+
+  /* ---------------- 年份 ---------------- */
 
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
+
+  /* ---------------- 滚动入场 ---------------- */
 
   var reduceMotion =
     window.matchMedia &&

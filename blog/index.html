@@ -19,6 +19,11 @@
       var saved = localStorage.getItem('theme');
       var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
     } catch (e) {}
   })();
 </script>
@@ -43,6 +48,7 @@
       <a href="mailto:1702732426@qq.com">1702732426@qq.com</a>
       <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <button class="theme-toggle" type="button">深色 / 浅色</button>
+      <button class="season-toggle" type="button">季节</button>
     </div>
   </aside>
   <main class="main" id="main">
