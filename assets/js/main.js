@@ -1,4 +1,4 @@
-/* 极简交互：主题切换 + 页脚年份。没有依赖，没有构建。 */
+/* 极简交互：主题切换、页脚年份、滚动时轻轻浮起。没有依赖，没有构建。 */
 (function () {
   'use strict';
 
@@ -39,4 +39,37 @@
 
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
+
+  // 内容随着滚动轻轻浮上来（不支持或关了动效就保持原样）
+  var reduceMotion =
+    window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var targets = document.querySelectorAll('.lede, section.block, .page-head, .article-header');
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -6% 0px', threshold: 0.02 }
+    );
+
+    targets.forEach(function (el, i) {
+      el.classList.add('reveal');
+      el.style.transitionDelay = Math.min(i * 60, 180) + 'ms';
+      io.observe(el);
+    });
+
+    // 兜底：万一观察器没触发，2.5 秒后全部显示，绝不留白屏
+    setTimeout(function () {
+      targets.forEach(function (el) {
+        el.classList.add('in');
+      });
+    }, 2500);
+  }
 })();
