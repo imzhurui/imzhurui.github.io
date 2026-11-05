@@ -139,4 +139,39 @@
       });
     }, 2500);
   }
+
+  /* ---------------- 顶部阅读进度 ---------------- */
+
+  var bar = document.querySelector('.progress');
+  if (bar) {
+    var updateBar = function () {
+      var el = document.documentElement;
+      var max = el.scrollHeight - el.clientHeight;
+      var ratio = max > 0 ? el.scrollTop / max : 0;
+      ratio = Math.min(1, Math.max(0, ratio));
+      bar.style.transform = 'scaleX(' + ratio + ')';
+    };
+    document.addEventListener('scroll', updateBar, { passive: true });
+    window.addEventListener('resize', updateBar);
+    updateBar();
+  }
+
+  /* ---------------- 跟随鼠标的柔光 ---------------- */
+
+  var spot = document.querySelector('.spotlight');
+  var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  if (spot && finePointer && !reduceMotion) {
+    var rafId = null;
+    var move = function (e) {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(function () {
+        spot.style.setProperty('--mx', e.clientX + 'px');
+        spot.style.setProperty('--my', e.clientY + 'px');
+        rafId = null;
+      });
+      if (!spot.classList.contains('on')) spot.classList.add('on');
+    };
+    document.addEventListener('pointermove', move, { passive: true });
+    document.addEventListener('mouseleave', function () { spot.classList.remove('on'); });
+  }
 })();

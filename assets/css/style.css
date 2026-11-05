@@ -540,6 +540,168 @@ a:hover { color: var(--accent); }
   --glow-violet: rgba(180, 196, 255, 0.20);
 }
 
+
+/* ---------------- 更多小动效 ---------------- */
+
+/* 顶部阅读进度 */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 70;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--glow-blue), var(--accent));
+  opacity: 0.9;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* 跟着鼠标的一团柔光 */
+.spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  background: radial-gradient(
+    240px 240px at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0) 70%
+  );
+  mix-blend-mode: soft-light;
+}
+.spotlight.on { opacity: 0.55; }
+
+/* 链接：下划线从左边长出来 */
+.section p a,
+.prose a,
+.reading a,
+.foot a,
+.article-header a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  transition: background-size 0.32s cubic-bezier(0.22, 0.61, 0.36, 1),
+    color 0.2s ease, border-color 0.32s ease;
+}
+.section p a:hover,
+.prose a:hover,
+.reading a:hover,
+.foot a:hover,
+.article-header a:hover {
+  background-size: 100% 1px;
+  border-color: transparent;
+  color: var(--accent);
+}
+
+/* 小节：进入视野时，标题下划出细线 */
+.sec-head { position: relative; }
+.sec-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.85rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--rule), transparent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.12s;
+}
+.section.in .sec-head::after { transform: scaleX(1); }
+
+.sec-num {
+  display: inline-block;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+.section:hover .sec-num { transform: translateY(-2px) scale(1.12); }
+
+/* 文章行：hover 时冒出一个小箭头 */
+.post h3::after {
+  content: "→";
+  margin-left: 0.45em;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  display: inline-block;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.post:hover h3::after { opacity: 1; transform: translateX(0); }
+
+/* 在读：hover 时左边浮出一条竖线 */
+.reading li {
+  position: relative;
+  padding-left: 0;
+  transition: padding-left 0.25s ease;
+}
+.reading li::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 0.25s ease;
+}
+.reading li:hover { padding-left: 0.4rem; }
+.reading li:hover::before { transform: scaleY(1); }
+
+/* 「最近」行：hover 时淡淡铺一层底色 */
+.now > div {
+  background: linear-gradient(90deg, var(--accent-soft), transparent 70%);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s ease, padding-left 0.25s ease, border-color 0.25s ease;
+}
+.now > div:hover { background-size: 100% 100%; }
+
+/* 按钮：按下时回弹一下 */
+.theme-toggle,
+.season-toggle {
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+.theme-toggle:active,
+.season-toggle:active { transform: scale(0.93); }
+
+/* 名字：hover 时微微发亮 */
+.brand a { transition: color 0.25s ease, text-shadow 0.35s ease; }
+.brand a:hover {
+  color: var(--accent);
+  text-shadow: 0 0 18px var(--accent-soft);
+}
+
+/* 导航：当前页左侧一条竖线 */
+.nav a {
+  position: relative;
+  transition: padding-left 0.22s ease, color 0.2s ease;
+}
+.nav a::before {
+  content: "";
+  position: absolute;
+  left: -0.6rem;
+  top: 0.55rem;
+  bottom: 0.55rem;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 0.25s ease;
+}
+.nav a:hover::before,
+.nav a[aria-current="page"]::before { transform: scaleY(1); }
+
 /* ---------------- 响应式 ---------------- */
 
 @media (max-width: 900px) {
