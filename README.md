@@ -117,7 +117,7 @@ python -m http.server 8000
 
 | 想改什么 | 改哪里 |
 | --- | --- |
-| 名字 `Rui Zhu` | 所有 `index.html`、`blog/*.html` 里的 `Rui Zhu`，以及 `index.html` 里的 brand 首字母 `R` |
+| 名字 `祝蕊` | 所有 `index.html`、`blog/*.html` 里的 `祝蕊`，以及 `index.html` 里的 brand 首字母 `R` |
 | 邮箱 `1702732426@qq.com` | `index.html`（两处：社交链接和联系按钮） |
 | GitHub 链接 `https://github.com/imzhurui` | `index.html`（首屏 + 联系区） |
 | 自我介绍、作品卡片 | `index.html` 里 `#about`、`#work` 两个 section |
