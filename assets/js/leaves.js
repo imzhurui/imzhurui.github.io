@@ -1,5 +1,5 @@
-/* 随季节变化的粒子：春花瓣、夏绿叶、秋落叶、冬小雪。
-   画在文字后面的一层 canvas，尊重「减少动态效果」，标签页隐藏时自动停下。 */
+/* 四季粒子：春落樱、夏流萤、秋飘叶、冬飞雪。
+   画在文字后面的一层 canvas；尊重「减少动态效果」；标签页隐藏时停下。 */
 (function () {
   'use strict';
 
@@ -10,6 +10,7 @@
   if (reduce && reduce.matches) return;
 
   var ctx = canvas.getContext('2d');
+  var TAU = Math.PI * 2;
   var dpr = 1;
   var W = 0;
   var H = 0;
@@ -17,66 +18,113 @@
   var raf = null;
   var lastT = 0;
   var resizeTimer = null;
-
   var MODE = 'leaf';
-  var PALETTE = ['#b8693c'];
-  var SHAPE = drawLeaf;
+  var glow = null;
 
-  var MODES = { spring: 'petal', summer: 'leaf', autumn: 'leaf', winter: 'snow' };
-  var PALETTES = {
-    spring: ['#e7b6c3', '#f1d2da', '#dda3b3', '#f6e3d8'],
-    summer: ['#7fa06a', '#8fae76', '#6f8f5c', '#a6bb8c'],
-    autumn: ['#b8693c', '#c78e50', '#9a7442', '#a9482c', '#7c8352', '#cba46b'],
-    winter: ['#c3cfdd', '#b2c0d1', '#d3dde8', '#a9b8c9']
+  var CFG = {
+    sakura: {
+      colors: ['#f7c6d5', '#fbdce6', '#f2b3c7', '#fde9f0', '#f9d2de'],
+      size: [3, 6], vy: [0.12, 0.34], sway: [16, 46], alpha: [0.55, 0.9],
+      step: 120, min: 9, max: 16
+    },
+    firefly: {
+      colors: ['#ffe9a8', '#e9ffb4', '#fff4c8'],
+      size: [1.2, 2.4], vy: [0.02, 0.10], sway: [0, 0], alpha: [0.5, 1],
+      step: 165, min: 7, max: 13
+    },
+    leaf: {
+      colors: ['#c98c63', '#d3a173', '#b57c55', '#c07a5e', '#a98a6a'],
+      size: [4, 9], vy: [0.15, 0.45], sway: [10, 38], alpha: [0.14, 0.34],
+      step: 135, min: 6, max: 14
+    },
+    snow: {
+      colors: ['#ffffff', '#eef5ff', '#dbe8fb'],
+      size: [1.5, 3.6], vy: [0.25, 0.8], sway: [8, 26], alpha: [0.6, 0.95],
+      step: 110, min: 12, max: 22
+    }
   };
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 
-  function makeParticle(spread) {
-    var size, vy, alpha;
-    if (MODE === 'snow') {
-      size = rand(1.6, 3.8);
-      vy = rand(0.22, 0.7);
-      alpha = rand(0.3, 0.7);
-    } else if (MODE === 'petal') {
-      size = rand(3, 6);
-      vy = rand(0.12, 0.34);
-      alpha = rand(0.4, 0.7);
-    } else {
-      size = rand(4, 9);
-      vy = rand(0.15, 0.45);
-      alpha = rand(0.12, 0.32);
-    }
+  function makeGlow() {
+    var s = 64;
+    var c = document.createElement('canvas');
+    c.width = c.height = s;
+    var g = c.getContext('2d');
+    var grd = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+    grd.addColorStop(0, 'rgba(255, 240, 180, 1)');
+    grd.addColorStop(0.25, 'rgba(255, 232, 160, 0.75)');
+    grd.addColorStop(0.6, 'rgba(255, 226, 140, 0.18)');
+    grd.addColorStop(1, 'rgba(255, 226, 140, 0)');
+    g.fillStyle = grd;
+    g.fillRect(0, 0, s, s);
+    return c;
+  }
 
+  function cfg() { return CFG[MODE] || CFG.leaf; }
+
+  function makeParticle(spread) {
+    var c = cfg();
     return {
-      baseX: rand(0, W),
+      baseX: rand(-10, W + 10),
       x: 0,
-      y: spread ? rand(-H, H) : rand(-H * 0.6, -20),
-      size: size,
-      vy: vy,
-      sway: rand(10, 38),
-      phase: rand(0, Math.PI * 2),
-      spin: rand(0, Math.PI * 2),
+      y: spread ? rand(-H, H) : rand(-H * 0.5, -20),
+      size: rand(c.size[0], c.size[1]),
+      vy: rand(c.vy[0], c.vy[1]),
+      sway: rand(c.sway[0], c.sway[1]),
+      vx: rand(-0.22, 0.22),
+      phase: rand(0, TAU),
+      spin: rand(0, TAU),
       spinV: rand(0.004, 0.012),
-      rot: rand(0, Math.PI * 2),
+      rot: rand(0, TAU),
       rotV: rand(-0.005, 0.005),
-      alpha: alpha,
-      color: PALETTE[Math.floor(Math.random() * PALETTE.length)]
+      pulse: rand(0.0007, 0.0018),
+      alpha: rand(c.alpha[0], c.alpha[1]),
+      color: c.colors[Math.floor(Math.random() * c.colors.length)]
     };
   }
 
   function targetCount() {
-    return Math.max(6, Math.min(14, Math.round(W / 135)));
+    var c = cfg();
+    return Math.max(c.min, Math.min(c.max, Math.round(W / c.step)));
   }
 
-  function drawLeaf(s) {
+  function respawn(p) {
+    var c = cfg();
+    p.baseX = rand(-10, W + 10);
+    p.y = -p.size - rand(20, 160);
+    p.size = rand(c.size[0], c.size[1]);
+    p.vy = rand(c.vy[0], c.vy[1]);
+    p.alpha = rand(c.alpha[0], c.alpha[1]);
+    p.color = c.colors[Math.floor(Math.random() * c.colors.length)];
+  }
+
+  /* ---------------- 形状 ---------------- */
+
+  function drawSakura(p) {
+    var s = p.size;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.moveTo(0, -s);
+    ctx.bezierCurveTo(s * 0.95, -s * 0.5, s * 0.7, s * 0.55, 0, s * 0.7);
+    ctx.bezierCurveTo(-s * 0.7, s * 0.55, -s * 0.95, -s * 0.5, 0, -s);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, -s * 0.55);
+    ctx.lineTo(0, s * 0.45);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+  }
+
+  function drawLeaf(p) {
+    var s = p.size;
+    ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.moveTo(0, -s);
     ctx.bezierCurveTo(s * 0.95, -s * 0.45, s * 0.55, s * 0.78, 0, s);
     ctx.bezierCurveTo(-s * 0.55, s * 0.78, -s * 0.95, -s * 0.45, 0, -s);
-    ctx.fillStyle = this.color;
     ctx.fill();
-
     ctx.beginPath();
     ctx.moveTo(0, -s * 0.78);
     ctx.quadraticCurveTo(s * 0.12, 0, 0, s * 0.78);
@@ -85,18 +133,80 @@
     ctx.stroke();
   }
 
-  function drawPetal(s) {
+  function drawSnow(p) {
     ctx.beginPath();
-    ctx.ellipse(0, 0, s * 0.55, s, 0, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
+    ctx.arc(0, 0, p.size * 0.55, 0, TAU);
+    ctx.fillStyle = p.color;
     ctx.fill();
   }
 
-  function drawSnow(s) {
+  function drawFirefly(p, t) {
+    if (!glow) glow = makeGlow();
+    var pulse = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * p.pulse + p.phase));
+    var size = p.size * 7 * (0.85 + 0.3 * pulse);
+    ctx.globalAlpha = p.alpha * pulse;
+    ctx.drawImage(glow, -size / 2, -size / 2, size, size);
+    ctx.globalAlpha = p.alpha * pulse * 0.9;
     ctx.beginPath();
-    ctx.arc(0, 0, s * 0.55, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
+    ctx.arc(0, 0, p.size * 0.5, 0, TAU);
+    ctx.fillStyle = '#fffbe6';
     ctx.fill();
+  }
+
+  /* ---------------- 运动 ---------------- */
+
+  function update(p, t, k) {
+    if (MODE === 'firefly') {
+      p.baseX += p.vx * k;
+      p.y += (Math.sin(t * 0.0006 + p.phase) * 0.22 + p.vy * 0.5) * k;
+      if (p.baseX < -24) p.baseX = W + 24;
+      if (p.baseX > W + 24) p.baseX = -24;
+      if (p.y < -30) p.y = H + 24;
+      if (p.y > H + 30) p.y = -24;
+      p.x = p.baseX;
+      return;
+    }
+
+    p.y += p.vy * k;
+    p.spin += p.spinV * k;
+    p.rot += p.rotV * k;
+    p.x = p.baseX + Math.sin(t * 0.00045 + p.phase) * p.sway;
+    if (p.y - p.size > H) respawn(p);
+  }
+
+  function draw(p, t) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    if (MODE === 'firefly') {
+      drawFirefly(p, t);
+      ctx.restore();
+      return;
+    }
+    ctx.globalAlpha = p.alpha;
+    ctx.rotate(p.rot);
+    if (MODE !== 'snow') ctx.scale(Math.cos(p.spin), 1);
+    if (MODE === 'sakura') drawSakura(p);
+    else if (MODE === 'snow') drawSnow(p);
+    else drawLeaf(p);
+    ctx.restore();
+  }
+
+  function tick(t) {
+    if (!lastT) lastT = t;
+    var dt = Math.min(t - lastT, 48);
+    lastT = t;
+    var k = dt / 16.67;
+
+    ctx.clearRect(0, 0, W, H);
+    if (MODE === 'firefly') ctx.globalCompositeOperation = 'lighter';
+
+    for (var i = 0; i < parts.length; i++) {
+      update(parts[i], t, k);
+      draw(parts[i], t);
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+    raf = window.requestAnimationFrame(tick);
   }
 
   function resize() {
@@ -110,52 +220,16 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     var want = targetCount();
+    parts.length = Math.min(parts.length, want);
     while (parts.length < want) parts.push(makeParticle(true));
-    if (parts.length > want) parts.length = want;
   }
+
+  var SEASON_MODE = { spring: 'sakura', summer: 'firefly', autumn: 'leaf', winter: 'snow' };
 
   function setSeason(name) {
-    MODE = MODES[name] || 'leaf';
-    PALETTE = PALETTES[name] || PALETTES.autumn;
-    SHAPE = MODE === 'snow' ? drawSnow : (MODE === 'petal' ? drawPetal : drawLeaf);
+    MODE = SEASON_MODE[name] || 'leaf';
     parts.length = 0;
     resize();
-  }
-
-  function draw(p) {
-    ctx.save();
-    ctx.globalAlpha = p.alpha;
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rot);
-    if (MODE !== 'snow') ctx.scale(Math.cos(p.spin), 1);
-    SHAPE.call(p, p.size);
-    ctx.restore();
-  }
-
-  function tick(t) {
-    if (!lastT) lastT = t;
-    var dt = Math.min(t - lastT, 48);
-    lastT = t;
-    var k = dt / 16.67;
-
-    ctx.clearRect(0, 0, W, H);
-
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i];
-      p.y += p.vy * k;
-      p.spin += p.spinV * k;
-      p.rot += p.rotV * k;
-      p.x = p.baseX + Math.sin(t * 0.00045 + p.phase) * p.sway;
-
-      if (p.y - p.size > H) {
-        p.y = -p.size - rand(20, 160);
-        p.baseX = rand(-20, W + 20);
-      }
-
-      draw(p);
-    }
-
-    raf = window.requestAnimationFrame(tick);
   }
 
   function start() {
@@ -171,7 +245,7 @@
     }
   }
 
-  setSeason(document.documentElement.dataset.season || 'autumn');
+  setSeason(document.documentElement.dataset.season || 'leaf');
   start();
 
   document.addEventListener('seasonchange', function (e) {
