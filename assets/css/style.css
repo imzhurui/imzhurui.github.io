@@ -312,7 +312,17 @@ a {
   display: flex;
   align-items: baseline;
   gap: 0.8rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.6rem;
+}
+
+/* 编号、标题之后，一条一直拉到右边缘的细线 */
+.sec-rule {
+  flex: 1 1 auto;
+  min-width: 2rem;
+  height: 1px;
+  align-self: center;
+  margin-left: 0.2rem;
+  background: linear-gradient(90deg, var(--rule), transparent 94%);
 }
 
 .sec-num {
@@ -332,8 +342,9 @@ a {
 }
 
 .section p {
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.25rem;
   color: var(--ink);
+  text-wrap: pretty;
 }
 .section p:last-child { margin-bottom: 0; }
 
@@ -370,15 +381,26 @@ a {
   padding: 0;
 }
 .reading li {
+  padding: 0.85rem 0;
+  font-size: 15.5px;
+}
+.reading li + li { border-top: 1px solid var(--rule); }
+
+.read-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 1.2rem;
-  padding: 0.7rem 0;
   flex-wrap: wrap;
-  font-size: 15.5px;
 }
-.reading li + li { border-top: 1px solid var(--rule); }
+
+.read-note {
+  margin: 0.32rem 0 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 30em;
+}
 
 .read-meta {
   font-size: 11px;
@@ -416,7 +438,7 @@ a {
 
 .post h3 {
   margin: 0 0 0.15rem;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1.6;
   letter-spacing: 0.005em;
@@ -487,7 +509,14 @@ a {
   letter-spacing: 0.01em;
 }
 
-.prose p, .prose ul, .prose ol { margin: 0 0 1.2rem; }
+.prose p {
+  margin: 0 0 0.5rem;
+  text-indent: 2em;
+  text-wrap: pretty;
+}
+.prose ul, .prose ol { margin: 0 0 1.2rem; }
+.prose p + ul, .prose p + ol { margin-top: 0.9rem; }
+.prose li > p { text-indent: 0; }
 .prose h2 {
   margin: 2.6rem 0 0.85rem;
   font-size: 1.15rem;
