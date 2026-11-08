@@ -156,22 +156,4 @@
     updateBar();
   }
 
-  /* ---------------- 跟随鼠标的柔光 ---------------- */
-
-  var spot = document.querySelector('.spotlight');
-  var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-  if (spot && finePointer && !reduceMotion) {
-    var rafId = null;
-    var move = function (e) {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(function () {
-        spot.style.setProperty('--mx', e.clientX + 'px');
-        spot.style.setProperty('--my', e.clientY + 'px');
-        rafId = null;
-      });
-      if (!spot.classList.contains('on')) spot.classList.add('on');
-    };
-    document.addEventListener('pointermove', move, { passive: true });
-    document.addEventListener('mouseleave', function () { spot.classList.remove('on'); });
-  }
 })();
