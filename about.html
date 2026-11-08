@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关于 · 祝蕊</title>
+<meta name="description" content="祝蕊，山东大学网络空间安全学院密码科学与技术 2024 级。记录 AI 隐私保护方向上的阅读与进展。">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于 · 祝蕊">
+<meta property="og:description" content="祝蕊，山东大学网络空间安全学院密码科学与技术 2024 级。记录 AI 隐私保护方向上的阅读与进展。">
+<link rel="canonical" href="https://imzhurui.github.io/about.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css?v=8486bfd8">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<canvas id="leaves" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"></div>
+<div class="frame">
+  <aside class="side">
+    <div>
+      <p class="kicker">个人主页</p>
+      <p class="brand"><a href="index.html">祝蕊</a></p>
+      <p class="role">山东大学 · 网络空间安全学院 · 密码科学与技术 2024 级</p>
+      <nav class="nav" aria-label="主导航">
+      <a href="research.html"><span>01</span>研究</a>
+      <a href="notes/index.html"><span>02</span>笔记</a>
+      <a href="reading.html"><span>03</span>在读</a>
+      <a href="about.html" aria-current="page"><span>04</span>关于</a>
+      </nav>
+    </div>
+    <div class="side-foot">
+      <a href="mailto:1702732426@qq.com">1702732426@qq.com</a>
+      <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <button class="theme-toggle" type="button">深色 / 浅色</button>
+      <button class="season-toggle" type="button">季节</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <p class="eyebrow">关于</p>
+    <h1 class="page-title">祝蕊</h1>
+    <p class="lede">数据要拿去训练模型，又不想让数据本身出门。</p>
+
+      <p>我是 2024 年进的山大。选专业时没想太多，只觉得「把信息藏起来」这件事有意思；后来发现它比想象中难，也比想象中有意思。</p>
+      <p>最上瘾的是那种「看起来不可能，但确实做到了」的时刻：两个人各自拿着一个数，互不知道对方的，却能一起算出一个结果，而且谁也没多知道一点。</p>
+      <p>除了专业，我在学怎么把话说清楚。写下来的东西会暴露理解上的漏洞——这大概是我坚持写这个站点的原因。</p>
+
+    <section class="section">
+      <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">这学期</h2><span class="sec-rule"></span></div>
+      <p class="courses-term">2026–2027 学年第一学期</p>
+      <ul class="courses"><li>隐私计算</li><li>密码工程</li><li>密码分析学</li><li>网络安全</li><li>算法设计与分析</li><li>机器学习</li><li>数字货币与区块链</li></ul>
+    </section>
+
+    <section class="section">
+      <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">联系</h2><span class="sec-rule"></span></div>
+      <p>邮件最快：<a href="mailto:1702732426@qq.com">1702732426@qq.com</a>。也可以在 <a href="https://github.com/imzhurui">GitHub</a> 上找到我。</p>
+    </section>
+    <footer class="foot">
+      <p>© <span id="year">2026</span> 祝蕊</p>
+      <p>最后更新 2026.11.08</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/js/main.js?v=8486bfd8"></script>
+<script src="assets/js/leaves.js?v=8486bfd8"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

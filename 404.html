@@ -5,19 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>这一页不见了 · 祝蕊</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%235b4bd6'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="/assets/css/style.css?v=06faf0be">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/css/style.css?v=8486bfd8">
 <script>
   (function () {
     try {
       var saved = localStorage.getItem('theme');
       var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
-      var mo = new Date().getMonth() + 1;
-      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
-      var savedSe = localStorage.getItem('season');
-      if (savedSe && savedSe !== 'auto') se = savedSe;
-      document.documentElement.dataset.season = se;
     } catch (e) {}
   })();
 </script>
@@ -25,10 +20,10 @@
 <body>
 <div class="frame" style="grid-template-columns:minmax(0,1fr)">
   <main class="main" style="padding-top:18vh">
-    <p class="kicker">404</p>
-    <h1 style="font-size:clamp(1.7rem,4vw,2.2rem);font-weight:600;margin:.4rem 0 1rem">这一页不见了</h1>
-    <p style="color:var(--muted);margin:0">可能链接过期了，也可能我把它删了。</p>
-    <p style="margin-top:2rem"><a href="/">回到首页</a> · <a href="/blog/">读点文字</a></p>
+    <p class="eyebrow">404</p>
+    <h1 class="page-title">这一页不见了</h1>
+    <p class="lede">可能链接过期了，也可能我把它删了。</p>
+    <p class="more"><a href="/">回到首页</a> · <a href="/notes/">读点笔记</a></p>
   </main>
 </div>
 </body>

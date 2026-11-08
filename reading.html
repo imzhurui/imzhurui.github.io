@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>在读 · 祝蕊</title>
+<meta name="description" content="按季度归档的阅读记录">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="在读 · 祝蕊">
+<meta property="og:description" content="按季度归档的阅读记录">
+<link rel="canonical" href="https://imzhurui.github.io/reading.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css?v=8486bfd8">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<canvas id="leaves" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"></div>
+<div class="frame">
+  <aside class="side">
+    <div>
+      <p class="kicker">个人主页</p>
+      <p class="brand"><a href="index.html">祝蕊</a></p>
+      <p class="role">山东大学 · 网络空间安全学院 · 密码科学与技术 2024 级</p>
+      <nav class="nav" aria-label="主导航">
+      <a href="research.html"><span>01</span>研究</a>
+      <a href="notes/index.html"><span>02</span>笔记</a>
+      <a href="reading.html" aria-current="page"><span>03</span>在读</a>
+      <a href="about.html"><span>04</span>关于</a>
+      </nav>
+    </div>
+    <div class="side-foot">
+      <a href="mailto:1702732426@qq.com">1702732426@qq.com</a>
+      <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <button class="theme-toggle" type="button">深色 / 浅色</button>
+      <button class="season-toggle" type="button">季节</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <p class="eyebrow">在读</p>
+    <h1 class="page-title">读到什么</h1>
+    <p class="lede">按季度归档。每条写一句「它解决了什么」，以及它跟哪个问题有关。</p>
+      <section class="note-group">
+        <h2 class="tag-head">2026 Q4<span>2</span></h2>
+        <ul class="reading">
+        <li>
+          <div class="read-head">
+            <a href="https://mp.weixin.qq.com/s/4HrNLbA0L0rddpk6diDxEQ" target="_blank" rel="noopener noreferrer">Google Nature 重磅研究：个人 AI Agent 正在崛起，隐私计算将成为下一代智能体的基础设施</a>
+            <span class="read-meta">开放隐私计算 · 2026.11.05</span>
+          </div>
+          <p class="read-note">个人 AI Agent 让数据「交出去」的方式变了，隐私计算的路线之争（TEE 还是密码学）也跟着变。</p>
+          <p class="read-rel">相关：<a href="research.html#q1">Q1 隐私计算里，哪些环节真的需要密码学？</a></p>
+        </li>
+        <li>
+          <div class="read-head">
+            <a href="https://mp.weixin.qq.com/s/ZrDddbA9AI6JXSQpSY9eCw" target="_blank" rel="noopener noreferrer">FlashProve：一个可证明推理的开源库</a>
+            <span class="read-meta">XPTY · 2026.11.01</span>
+          </div>
+          <p class="read-note">可证明推理：让模型说清自己算了什么，别人还能验。这里有一个开源实现。</p>
+          <p class="read-rel">相关：<a href="research.html#q2">Q2 可验证推理到底能证明什么？</a></p>
+        </li>
+        </ul>
+      </section>
+    <footer class="foot">
+      <p>© <span id="year">2026</span> 祝蕊</p>
+      <p>最后更新 2026.11.08</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/js/main.js?v=8486bfd8"></script>
+<script src="assets/js/leaves.js?v=8486bfd8"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

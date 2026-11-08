@@ -630,6 +630,174 @@ a {
 }
 .reveal.in { opacity: 1; transform: none; }
 
+/* ---------------- 研究者式组件 ---------------- */
+
+.eyebrow {
+  margin: 0 0 1.4rem;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statement {
+  margin: 0 0 1.3rem;
+  font-size: clamp(1.55rem, 2.9vw, 2.05rem);
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  max-width: 26em;
+  text-wrap: pretty;
+}
+
+.page-title {
+  margin: 0 0 1.1rem;
+  font-size: clamp(1.4rem, 2.4vw, 1.7rem);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+/* 首页的问题清单 */
+.qlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.qlist li + li { border-top: 1px solid var(--rule); }
+
+.qlist a {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.85rem 0;
+  color: var(--ink);
+  transition: color 0.2s ease;
+}
+.qlist a:hover { color: var(--accent); }
+
+.qid {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.qtitle { font-size: 16px; line-height: 1.6; }
+
+.qstate {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* 问题卡片 */
+.qcard {
+  padding: 2.1rem 0;
+  border-top: 1px solid var(--rule);
+}
+.qcard:first-of-type { border-top: 0; padding-top: 1.2rem; }
+
+.qcard-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.qcard-head h2 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.005em;
+}
+
+.badge {
+  margin-left: auto;
+  padding: 2px 9px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.qfields {
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+  font-size: 15px;
+}
+
+.qfields > div {
+  display: grid;
+  grid-template-columns: 4.3rem minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.qfields dt {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  padding-top: 0.42rem;
+}
+
+.qfields dd { margin: 0; }
+
+.qmeta {
+  margin: 1.1rem 0 0;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 分组标题 */
+.note-group + .note-group { margin-top: 2.4rem; }
+
+.tag-head {
+  margin: 0 0 0.7rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.tag-head span {
+  margin-left: 0.7em;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* 阅读条目的关联 */
+.read-rel {
+  margin: 0.4rem 0 0;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.article-tags {
+  margin: 0.7rem 0 0;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.empty {
+  margin: 1.4rem 0 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
 /* ---------------- 响应式 ---------------- */
 
 @media (max-width: 940px) {
@@ -655,6 +823,9 @@ a {
   .post { grid-template-columns: 5.2rem minmax(0, 1fr); gap: 0.9rem; }
   .now > div { grid-template-columns: 3.6rem 1fr; }
   .courses { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .qlist a { grid-template-columns: 2.2rem minmax(0, 1fr); }
+  .qlist .qstate { grid-column: 2; }
+  .qfields > div { grid-template-columns: 3.4rem minmax(0, 1fr); gap: 0.7rem; }
 }
 
 @media (max-width: 480px) {

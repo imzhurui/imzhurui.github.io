@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>研究 · 祝蕊</title>
+<meta name="description" content="在做的研究问题与进度">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="研究 · 祝蕊">
+<meta property="og:description" content="在做的研究问题与进度">
+<link rel="canonical" href="https://imzhurui.github.io/research.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css?v=8486bfd8">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<canvas id="leaves" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"></div>
+<div class="frame">
+  <aside class="side">
+    <div>
+      <p class="kicker">个人主页</p>
+      <p class="brand"><a href="index.html">祝蕊</a></p>
+      <p class="role">山东大学 · 网络空间安全学院 · 密码科学与技术 2024 级</p>
+      <nav class="nav" aria-label="主导航">
+      <a href="research.html" aria-current="page"><span>01</span>研究</a>
+      <a href="notes/index.html"><span>02</span>笔记</a>
+      <a href="reading.html"><span>03</span>在读</a>
+      <a href="about.html"><span>04</span>关于</a>
+      </nav>
+    </div>
+    <div class="side-foot">
+      <a href="mailto:1702732426@qq.com">1702732426@qq.com</a>
+      <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <button class="theme-toggle" type="button">深色 / 浅色</button>
+      <button class="season-toggle" type="button">季节</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <p class="eyebrow">研究</p>
+    <h1 class="page-title">在做的几个问题</h1>
+    <p class="lede">每个问题写四行：问题本身、为什么难、别人做到哪、我卡在哪。写不出来的部分，就是还没读懂的部分。</p>
+      <article class="qcard" id="q1">
+        <header class="qcard-head">
+          <span class="qid">Q1</span>
+          <h2>隐私计算里，哪些环节真的需要密码学？</h2>
+          <span class="badge">在读</span>
+        </header>
+        <dl class="qfields">
+          <div><dt>为什么难</dt><dd>TEE 便宜但依赖硬件信任，密码学可信但代价高；两派常被混着说，很少按环节拆开谈。</dd></div>
+          <div><dt>目前看到</dt><dd>同态加密在训练阶段开销仍然过大，MPC 更适合推理；差分隐私是另一条不依赖密码学的路。</dd></div>
+          <div><dt>我卡在</dt><dd>不知道边界在哪里——没有一个按环节（预处理、训练、推理、更新）的量化对比。</dd></div>
+        </dl>
+        <p class="qmeta">更新 2026.11.08</p>
+      </article>
+      <article class="qcard" id="q2">
+        <header class="qcard-head">
+          <span class="qid">Q2</span>
+          <h2>可验证推理到底能证明什么？</h2>
+          <span class="badge">在读</span>
+        </header>
+        <dl class="qfields">
+          <div><dt>为什么难</dt><dd>模型说"我算过了"，外部只能选择信或不信；零知识证明想把"算对了"变成可检验的命题。</dd></div>
+          <div><dt>目前看到</dt><dd>FlashProve 给出一个开源实现；证明生成开销与模型规模的关系还不清楚。</dd></div>
+          <div><dt>我卡在</dt><dd>没读懂证明系统的构造，只能理解它想解决什么。</dd></div>
+        </dl>
+        <p class="qmeta">更新 2026.11.08</p>
+      </article>
+    <p class="more"><a href="reading.html">这些问题的阅读书目 →</a></p>
+    <footer class="foot">
+      <p>© <span id="year">2026</span> 祝蕊</p>
+      <p>最后更新 2026.11.08</p>
+    </footer>
+  </main>
+</div>
+<script src="assets/js/main.js?v=8486bfd8"></script>
+<script src="assets/js/leaves.js?v=8486bfd8"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
