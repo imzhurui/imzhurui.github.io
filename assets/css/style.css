@@ -798,6 +798,63 @@ a {
   color: var(--muted);
 }
 
+/* 首页「现在」一行 */
+.now-strip {
+  margin: 1.7rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.8rem;
+}
+
+.now-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.now-meta {
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.9;
+}
+
+/* 竞赛条目 */
+.comp { padding: 0.9rem 0; }
+.comp + .comp { border-top: 1px solid var(--rule); }
+
+.comp-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.comp-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.comp-track {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.comp-head .badge { margin-left: auto; }
+
+.comp-meta {
+  margin: 0.25rem 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ---------------- 响应式 ---------------- */
 
 @media (max-width: 940px) {
