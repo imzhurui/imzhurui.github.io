@@ -24,23 +24,27 @@
   var CFG = {
     sakura: {
       colors: ['#f7c6d5', '#fbdce6', '#f2b3c7', '#fde9f0', '#f9d2de'],
-      size: [4, 8], vy: [0.10, 0.36], sway: [16, 46], alpha: [0.65, 0.95],
-      step: 30, min: 24, max: 62
+      size: [4, 8], vy: [0.07, 0.26], sway: [22, 60], alpha: [0.65, 0.95],
+      spinV: [0.012, 0.03], rotV: [-0.004, 0.004],
+      step: 20, min: 22, max: 90
     },
     firefly: {
       colors: ['#ffe9a8', '#e9ffb4', '#fff4c8'],
-      size: [1.4, 2.6], vy: [0.02, 0.10], sway: [0, 0], alpha: [0.6, 1],
-      step: 42, min: 18, max: 46
+      size: [1.4, 2.6], vy: [0.02, 0.08], sway: [12, 34], alpha: [0.6, 1],
+      spinV: [0, 0], rotV: [0, 0],
+      step: 30, min: 16, max: 62
     },
     leaf: {
       colors: ['#c98c63', '#d3a173', '#b57c55', '#c07a5e', '#a98a6a'],
-      size: [4, 9], vy: [0.12, 0.45], sway: [10, 40], alpha: [0.28, 0.55],
-      step: 36, min: 22, max: 54
+      size: [4, 9], vy: [0.12, 0.5], sway: [8, 32], alpha: [0.3, 0.58],
+      spinV: [0.03, 0.07], rotV: [-0.02, 0.02],
+      step: 24, min: 20, max: 72
     },
     snow: {
-      colors: ['#ffffff', '#eef5ff', '#dbe8fb'],
-      size: [2.2, 5], vy: [0.18, 0.72], sway: [8, 30], alpha: [0.8, 1],
-      step: 20, min: 34, max: 96
+      colors: ['#ffffff', '#f4f9ff', '#e8f2ff', '#dbe9fb'],
+      size: [2.2, 5], vy: [0.3, 0.9], sway: [0, 2], alpha: [0.8, 1],
+      spinV: [0, 0], rotV: [0, 0],
+      step: 16, min: 30, max: 110
     }
   };
 
@@ -75,9 +79,9 @@
       vx: rand(-0.22, 0.22),
       phase: rand(0, TAU),
       spin: rand(0, TAU),
-      spinV: rand(0.004, 0.012),
+      spinV: rand(c.spinV[0], c.spinV[1]),
       rot: rand(0, TAU),
-      rotV: rand(-0.005, 0.005),
+      rotV: rand(c.rotV[0], c.rotV[1]),
       pulse: rand(0.0007, 0.0018),
       alpha: rand(c.alpha[0], c.alpha[1]),
       color: c.colors[Math.floor(Math.random() * c.colors.length)]
@@ -163,14 +167,16 @@
       if (p.baseX > W + 24) p.baseX = -24;
       if (p.y < -30) p.y = H + 24;
       if (p.y > H + 30) p.y = -24;
-      p.x = p.baseX;
+      p.x = p.baseX + Math.sin(t * 0.0007 + p.phase) * p.sway;
       return;
     }
 
     p.y += p.vy * k;
-    p.spin += p.spinV * k;
-    p.rot += p.rotV * k;
-    p.x = p.baseX + Math.sin(t * 0.00045 + p.phase) * p.sway;
+    if (MODE !== 'snow') {
+      p.spin += p.spinV * k;
+      p.rot += p.rotV * k;
+    }
+    p.x = p.baseX + (MODE === 'snow' ? 0 : Math.sin(t * 0.00045 + p.phase) * p.sway);
     if (p.y - p.size > H) respawn(p);
   }
 

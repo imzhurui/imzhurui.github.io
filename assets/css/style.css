@@ -46,12 +46,14 @@
 }
 
 [data-season="autumn"] {
-  --paper: #fbfaf8;
-  --paper-2: #f4f3f6;
-  --rule: #e7e5e6;
-  --accent: #6a5a9e;
-  --accent-soft: rgba(106, 90, 158, 0.07);
-  --wash: rgba(150, 135, 205, 0.14);
+  --paper: #f8f2ea;
+  --paper-2: #f0e5d9;
+  --ink: #211c18;
+  --muted: #7b6f64;
+  --rule: #e8dbcd;
+  --accent: #a2664a;
+  --accent-soft: rgba(162, 102, 74, 0.08);
+  --wash: rgba(232, 168, 116, 0.22);
 }
 
 [data-season="winter"] {
