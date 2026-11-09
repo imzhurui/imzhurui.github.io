@@ -17,6 +17,11 @@
     }
   }
 
+  function forced() {
+    var m = /[?&]phase=(day|dusk|night|late)/.exec(window.location ? window.location.search : '');
+    return m ? m[1] : null;
+  }
+
   function resolve(hour) {
     if (hour >= 6 && hour < 17) return 'day';
     if (hour >= 17 && hour < 19) return 'dusk';
@@ -25,7 +30,7 @@
   }
 
   function apply() {
-    var next = resolve(qingdaoHour());
+    var next = forced() || resolve(qingdaoHour());
     if (next === phase && root.dataset.phase) return;
     phase = next;
     root.dataset.phase = phase;

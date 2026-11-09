@@ -21,30 +21,34 @@
   color-scheme: light;
 }
 
-/* ---------------- 四季：底色、墨色、强调色都换 ----------------
-   夏夜与冬夜整页转深：萤火和雪才看得见 */
+/* ---------------- 四季 × 昼夜 ----------------
+   每个季节都有白天和夜里两套底色，由青岛时间切换 */
 
+/* 春 · 白天 */
 [data-season="spring"] {
   --paper: #fef6f8;
   --paper-2: #f9eef7;
+  --ink: #191a1f;
+  --muted: #71767f;
   --rule: #eee0e9;
   --accent: #a8557a;
   --accent-soft: rgba(168, 85, 122, 0.08);
   --wash: rgba(240, 140, 185, 0.22);
 }
 
+/* 夏 · 白天 */
 [data-season="summer"] {
-  color-scheme: dark;
-  --paper: #0b211d;
-  --paper-2: #071713;
-  --ink: #e2f2ea;
-  --muted: #8fb0a6;
-  --rule: #1c322c;
-  --accent: #7fd8c4;
-  --accent-soft: rgba(127, 216, 196, 0.12);
-  --wash: rgba(110, 210, 180, 0.14);
+  --paper: #f3fbfa;
+  --paper-2: #e8f5f3;
+  --ink: #16211f;
+  --muted: #6b7876;
+  --rule: #d9e9e6;
+  --accent: #2f8f7a;
+  --accent-soft: rgba(47, 143, 122, 0.08);
+  --wash: rgba(110, 205, 185, 0.20);
 }
 
+/* 秋 · 白天 */
 [data-season="autumn"] {
   --paper: #f8f2ea;
   --paper-2: #f0e5d9;
@@ -56,7 +60,61 @@
   --wash: rgba(232, 168, 116, 0.22);
 }
 
+/* 冬 · 白天 */
 [data-season="winter"] {
+  --paper: #f5f9fd;
+  --paper-2: #eaf1f9;
+  --ink: #18202a;
+  --muted: #6b7887;
+  --rule: #dfe7f0;
+  --accent: #4a7fa8;
+  --accent-soft: rgba(74, 127, 168, 0.08);
+  --wash: rgba(150, 195, 240, 0.20);
+}
+
+/* ---------------- 夜里 ---------------- */
+
+[data-season="spring"][data-phase="night"],
+[data-season="spring"][data-phase="late"] {
+  color-scheme: dark;
+  --paper: #1a1220;
+  --paper-2: #241a2c;
+  --ink: #ece7f2;
+  --muted: #a89cb0;
+  --rule: #2a2233;
+  --accent: #d78fae;
+  --accent-soft: rgba(215, 143, 174, 0.12);
+  --wash: rgba(215, 143, 174, 0.10);
+}
+
+[data-season="summer"][data-phase="night"],
+[data-season="summer"][data-phase="late"] {
+  color-scheme: dark;
+  --paper: #0b211d;
+  --paper-2: #071713;
+  --ink: #e2f2ea;
+  --muted: #8fb0a6;
+  --rule: #1c322c;
+  --accent: #7fd8c4;
+  --accent-soft: rgba(127, 216, 196, 0.12);
+  --wash: rgba(110, 210, 180, 0.14);
+}
+
+[data-season="autumn"][data-phase="night"],
+[data-season="autumn"][data-phase="late"] {
+  color-scheme: dark;
+  --paper: #1a1310;
+  --paper-2: #241a15;
+  --ink: #f0e6dc;
+  --muted: #b09b8a;
+  --rule: #2f241d;
+  --accent: #d09a72;
+  --accent-soft: rgba(208, 154, 114, 0.12);
+  --wash: rgba(215, 150, 100, 0.12);
+}
+
+[data-season="winter"][data-phase="night"],
+[data-season="winter"][data-phase="late"] {
   color-scheme: dark;
   --paper: #16202e;
   --paper-2: #0c1420;
@@ -66,6 +124,11 @@
   --accent: #a9cde8;
   --accent-soft: rgba(169, 205, 232, 0.12);
   --wash: rgba(170, 205, 255, 0.16);
+}
+
+/* 黄昏：白天配色 + 一层暖光，过渡到夜里 */
+[data-season][data-phase="dusk"] {
+  --wash: rgba(238, 160, 105, 0.24);
 }
 
 *,
@@ -93,7 +156,7 @@ body {
   line-height: 1.78;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition: background-color 0.4s ease, color 0.3s ease;
+  transition: background-color 1.2s ease, color 0.8s ease;
 }
 
 /* 极淡的纸纹 */
@@ -954,17 +1017,14 @@ body::after {
 }
 
 [data-phase="night"] .timeveil {
-  opacity: 1;
-  background: linear-gradient(180deg,
-    rgba(26, 36, 58, 0.18),
-    rgba(10, 16, 28, 0.12));
+  opacity: 0;
 }
 
 [data-phase="late"] .timeveil {
   opacity: 1;
   background: linear-gradient(180deg,
-    rgba(14, 22, 40, 0.28),
-    rgba(6, 10, 18, 0.18));
+    rgba(10, 16, 30, 0.16),
+    rgba(4, 7, 14, 0.10));
 }
 
 /* ---------------- 响应式 ---------------- */

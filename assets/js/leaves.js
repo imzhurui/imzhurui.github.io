@@ -60,6 +60,25 @@
     }
   };
 
+  /* 白天与夜里用不同的粒子色（雪在浅底上不能用纯白） */
+  function phaseIsLight() {
+    var ph = document.documentElement.dataset.phase || 'day';
+    return ph === 'day' || ph === 'dusk';
+  }
+
+  function applyPhaseColors() {
+    var light = phaseIsLight();
+    CFG.snow.colors = light
+      ? ['#aec1d6', '#c2d2e3', '#9db1c8']
+      : ['#ffffff', '#f4f9ff', '#e8f2ff', '#dbe9fb'];
+    CFG.firefly.colors = light
+      ? ['#d9a23c', '#e6b451', '#c98f2e']
+      : ['#ffe9a8', '#e9ffb4', '#fff4c8'];
+    CFG.rain.colors = light
+      ? ['#8aa2c2', '#9fb6d4']
+      : ['#9fb6d4', '#b6c9e0'];
+  }
+
   /* 天气覆盖：拿不到天气就用季节默认 */
   var WEATHER_MODE = { overcast: 'none', rain: 'rain', snow: 'snow' };
   var SEASON_MODE = { spring: 'sakura', summer: 'firefly', autumn: 'leaf', winter: 'snow' };
@@ -298,8 +317,15 @@
     }
   }
 
+  applyPhaseColors();
   setSeason(document.documentElement.dataset.season || 'leaf');
   start();
+
+  document.addEventListener('phasechange', function () {
+    applyPhaseColors();
+    parts.length = 0;
+    resize();
+  });
 
   document.addEventListener('seasonchange', function (e) {
     setSeason(e.detail && e.detail.season);
