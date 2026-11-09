@@ -25,22 +25,22 @@
     sakura: {
       colors: ['#f7c6d5', '#fbdce6', '#f2b3c7', '#fde9f0', '#f9d2de'],
       size: [3.5, 7], vy: [0.10, 0.36], sway: [16, 46], alpha: [0.55, 0.9],
-      step: 55, min: 18, max: 46
+      step: 30, min: 24, max: 62
     },
     firefly: {
       colors: ['#ffe9a8', '#e9ffb4', '#fff4c8'],
       size: [1.4, 2.6], vy: [0.02, 0.10], sway: [0, 0], alpha: [0.6, 1],
-      step: 85, min: 14, max: 32
+      step: 42, min: 18, max: 46
     },
     leaf: {
       colors: ['#c98c63', '#d3a173', '#b57c55', '#c07a5e', '#a98a6a'],
       size: [4, 9], vy: [0.12, 0.45], sway: [10, 40], alpha: [0.28, 0.55],
-      step: 70, min: 16, max: 38
+      step: 36, min: 22, max: 54
     },
     snow: {
       colors: ['#ffffff', '#eef5ff', '#dbe8fb'],
       size: [2, 4.6], vy: [0.18, 0.75], sway: [8, 28], alpha: [0.75, 1],
-      step: 38, min: 26, max: 62
+      step: 20, min: 34, max: 96
     }
   };
 
