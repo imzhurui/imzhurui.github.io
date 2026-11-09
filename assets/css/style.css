@@ -26,14 +26,14 @@
 
 /* 春 · 白天 */
 [data-season="spring"] {
-  --paper: #fef6f8;
-  --paper-2: #f9eef7;
-  --ink: #191a1f;
-  --muted: #71767f;
-  --rule: #eee0e9;
+  --paper: #fdfbfc;
+  --paper-2: #f7f4f6;
+  --ink: #1a1a1f;
+  --muted: #72747c;
+  --rule: #eae4e9;
   --accent: #a8557a;
   --accent-soft: rgba(168, 85, 122, 0.08);
-  --wash: rgba(240, 140, 185, 0.22);
+  --wash: rgba(240, 160, 190, 0.10);
 }
 
 /* 夏 · 白天 */
