@@ -935,6 +935,38 @@ body::after {
   opacity: 0.9;
 }
 
+/* ---------------- 昼夜：一层很薄的天光 ---------------- */
+
+.timeveil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2.4s ease, background 2.4s ease;
+}
+
+[data-phase="dusk"] .timeveil {
+  opacity: 1;
+  background: linear-gradient(180deg,
+    rgba(255, 168, 110, 0.12),
+    rgba(140, 90, 70, 0.05));
+}
+
+[data-phase="night"] .timeveil {
+  opacity: 1;
+  background: linear-gradient(180deg,
+    rgba(26, 36, 58, 0.18),
+    rgba(10, 16, 28, 0.12));
+}
+
+[data-phase="late"] .timeveil {
+  opacity: 1;
+  background: linear-gradient(180deg,
+    rgba(14, 22, 40, 0.28),
+    rgba(6, 10, 18, 0.18));
+}
+
 /* ---------------- 响应式 ---------------- */
 
 @media (max-width: 940px) {
