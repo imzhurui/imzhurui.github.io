@@ -62,8 +62,7 @@
 
   /* 天气覆盖：拿不到天气就用季节默认 */
   var WEATHER_MODE = { overcast: 'none', rain: 'rain', snow: 'snow' };
-  var SEASON_MODE = { spring: 'sakura', summer: 'firefly', autumn: 'leaf',
-    winter: 'snow', moss: 'firefly' };
+  var SEASON_MODE = { spring: 'sakura', summer: 'firefly', autumn: 'leaf', winter: 'snow' };
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 

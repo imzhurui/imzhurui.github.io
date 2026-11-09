@@ -6,14 +6,14 @@
 <title>这一页不见了 · 祝蕊</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="/assets/css/style.css?v=a7856ab9">
+<link rel="stylesheet" href="/assets/css/style.css?v=01b4f2d9">
 <script>
   (function () {
     try {
       var mo = new Date().getMonth() + 1;
       var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
       var savedSe = localStorage.getItem('season');
-      if (savedSe && savedSe !== 'auto') se = savedSe;
+      if (savedSe && ['spring', 'summer', 'autumn', 'winter'].indexOf(savedSe) >= 0) se = savedSe;
       document.documentElement.dataset.season = se;
     } catch (e) {}
   })();
