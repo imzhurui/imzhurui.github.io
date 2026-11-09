@@ -348,6 +348,7 @@ a {
 .nav a[aria-current="page"]::before { transform: scaleY(1); }
 
 .side-foot {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -388,6 +389,82 @@ a {
 .auto-toggle:active { opacity: 0.55; }
 
 .auto-toggle { color: var(--accent); opacity: 0.85; }
+
+/* 自定义组合面板 */
+.custom-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.custom-toggle:hover { color: var(--accent); }
+
+.custom-panel {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 0.7rem;
+  width: 12.5rem;
+  max-width: calc(100vw - 3rem);
+  padding: 0.9rem 0.95rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  box-shadow: 0 16px 34px -22px rgba(0, 0, 0, 0.55);
+  z-index: 40;
+  font-size: 11.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.custom-panel[hidden] { display: none; }
+
+.custom-panel label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.custom-panel select {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.custom-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.custom-actions button {
+  flex: 1;
+  padding: 4px 0;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-actions button:hover { color: var(--accent); border-color: var(--accent); }
+.custom-actions .c-apply { color: var(--accent); border-color: var(--accent); }
 
 /* ---------------- 正文 ---------------- */
 

@@ -77,6 +77,13 @@
     apply();
   });
 
+  document.addEventListener('applylayers', function (e) {
+    var phase = e.detail && e.detail.phase;
+    if (KEYS.indexOf(phase) < 0) return;
+    pref = phase;
+    apply();
+  });
+
   apply();
   setInterval(apply, 10 * 60 * 1000);
 })();

@@ -109,5 +109,13 @@
     refresh();
   });
 
+  document.addEventListener('applylayers', function (e) {
+    var kind = e.detail && e.detail.weather;
+    if (KEYS.indexOf(kind) < 0) return;
+    pref = kind;
+    temp = null;
+    refresh();
+  });
+
   refresh();
 })();

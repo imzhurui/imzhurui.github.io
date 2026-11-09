@@ -83,6 +83,59 @@
     });
   }
 
+  /* ---------------- 自定义组合 ---------------- */
+
+  var customBtn = document.querySelector('.custom-toggle');
+  var panel = document.querySelector('.custom-panel');
+  var selSeason = document.querySelector('.c-season');
+  var selPhase = document.querySelector('.c-phase');
+  var selWeather = document.querySelector('.c-weather');
+
+  function openPanel() {
+    if (!panel) return;
+    if (selSeason) selSeason.value = root.dataset.season || 'autumn';
+    if (selPhase) selPhase.value = root.dataset.phase || 'day';
+    if (selWeather) selWeather.value = root.dataset.weather || 'sunny';
+    panel.hidden = false;
+  }
+
+  function closePanel() {
+    if (panel) panel.hidden = true;
+  }
+
+  if (customBtn && panel) {
+    customBtn.addEventListener('click', function () {
+      if (panel.hidden) openPanel();
+      else closePanel();
+    });
+
+    var applyBtn = panel.querySelector('.c-apply');
+    var closeBtn = panel.querySelector('.c-close');
+
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function () {
+        var combo = {
+          season: selSeason ? selSeason.value : 'autumn',
+          phase: selPhase ? selPhase.value : 'day',
+          weather: selWeather ? selWeather.value : 'sunny'
+        };
+        try {
+          localStorage.setItem('season', combo.season);
+          localStorage.setItem('phase', combo.phase);
+          localStorage.setItem('weather', combo.weather);
+        } catch (e) {}
+        applySeason(combo.season);
+        document.dispatchEvent(
+          new CustomEvent('seasonchange', { detail: { season: root.dataset.season } })
+        );
+        document.dispatchEvent(new CustomEvent('applylayers', { detail: combo }));
+        closePanel();
+      });
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+  }
+
   /* ---------------- 年份 ---------------- */
 
   var year = document.getElementById('year');

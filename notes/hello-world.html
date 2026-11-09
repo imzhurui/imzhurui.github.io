@@ -11,7 +11,7 @@
 <meta property="og:description" content="社交平台上的内容属于平台，只有自己的域名和仓库才是自己的。这篇写我决定动手的原因。">
 <link rel="canonical" href="https://imzhurui.github.io/notes/hello-world.html">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/css/style.css?v=e2ae9da0">
+<link rel="stylesheet" href="../assets/css/style.css?v=3e736dd5">
 <script>
   (function () {
     try {
@@ -53,6 +53,38 @@
       <button class="phase-toggle" type="button">昼夜</button>
       <button class="weather-toggle" type="button">天气</button>
       <button class="auto-toggle" type="button">全部自动</button>
+      <button class="custom-toggle" type="button">自定义…</button>
+      <div class="custom-panel" hidden>
+        <label>季节
+          <select class="c-season">
+            <option value="spring">春</option>
+            <option value="summer">夏</option>
+            <option value="autumn">秋</option>
+            <option value="winter">冬</option>
+          </select>
+        </label>
+        <label>昼夜
+          <select class="c-phase">
+            <option value="day">白天</option>
+            <option value="dusk">黄昏</option>
+            <option value="night">夜间</option>
+            <option value="late">深夜</option>
+          </select>
+        </label>
+        <label>天气
+          <select class="c-weather">
+            <option value="sunny">晴</option>
+            <option value="cloudy">多云</option>
+            <option value="overcast">阴</option>
+            <option value="rain">雨</option>
+            <option value="snow">雪</option>
+          </select>
+        </label>
+        <div class="custom-actions">
+          <button class="c-apply" type="button">应用</button>
+          <button class="c-close" type="button">取消</button>
+        </div>
+      </div>
     </div>
   </aside>
   <main class="main" id="main">
@@ -86,10 +118,10 @@
     </footer>
   </main>
 </div>
-<script src="../assets/js/main.js?v=e2ae9da0"></script>
-<script src="../assets/js/weather.js?v=e2ae9da0"></script>
-<script src="../assets/js/daynight.js?v=e2ae9da0"></script>
-<script src="../assets/js/leaves.js?v=e2ae9da0"></script>
+<script src="../assets/js/main.js?v=3e736dd5"></script>
+<script src="../assets/js/weather.js?v=3e736dd5"></script>
+<script src="../assets/js/daynight.js?v=3e736dd5"></script>
+<script src="../assets/js/leaves.js?v=3e736dd5"></script>
 <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
