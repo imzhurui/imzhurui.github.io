@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Nature：个人 AI Agent 与隐私计算 · 祝蕊</title>
+<meta name="description" content="一个模型不够用，要几个专业 Agent 分工；作者进一步论证：隐私计算是下一代个人智能体的基础设施，但 TEE 与密码学不能互相替代。">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Google Nature：个人 AI Agent 与隐私计算 · 祝蕊">
+<meta property="og:description" content="一个模型不够用，要几个专业 Agent 分工；作者进一步论证：隐私计算是下一代个人智能体的基础设施，但 TEE 与密码学不能互相替代。">
+<link rel="canonical" href="https://imzhurui.github.io/notes/google-pha-agent.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/style.css?v=90a6ca45">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<canvas id="leaves" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"></div>
+<div class="frame">
+  <aside class="side">
+    <div>
+      <p class="kicker">个人主页</p>
+      <p class="brand"><a href="../index.html">祝蕊</a></p>
+      <p class="role">山东大学 · 网络空间安全学院 · 密码科学与技术 2024 级</p>
+      <nav class="nav" aria-label="主导航">
+      <a href="../research.html"><span>01</span>研究</a>
+      <a href="../notes/index.html" aria-current="page"><span>02</span>笔记</a>
+      <a href="../reading.html"><span>03</span>在读</a>
+      <a href="../about.html"><span>04</span>关于</a>
+      </nav>
+    </div>
+    <div class="side-foot">
+      <a href="mailto:1702732426@qq.com">1702732426@qq.com</a>
+      <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <button class="theme-toggle" type="button">深色 / 浅色</button>
+      <button class="season-toggle" type="button">季节</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <article>
+      <header class="article-header">
+        <p class="meta">2026 年 11 月 9 日 · 完成</p>
+        <h1>Google Nature：个人 AI Agent 与隐私计算</h1>
+        <p class="article-tags">论文笔记 · 隐私计算</p>
+      </header>
+      <div class="prose">
+<ul><li>来源：微信公众号「开放隐私计算」技术观察</li><li>原文标题：Google Nature 重磅研究：个人 AI Agent 正在崛起，隐私计算将成为下一代智能体的基础设施</li><li>原文链接：https://mp.weixin.qq.com/s/4HrNLbA0L0rddpk6diDxEQ</li><li>关键词：多智能体 · 个人数据主权 · 隐私计算 · 个人健康智能体（PHA）</li><li>整理日期：2026-11-09</li></ul>
+<hr>
+<h2>一句话概括</h2>
+<p>Google 在 Nature 上发表了"个人健康 AI 助手"的研究，证明<strong>一个万能模型不够用，需要几个专门的 AI 分工协作</strong>；文章作者进一步提出——当个人 AI 要接入健康、日程、聊天等敏感数据时，<strong>隐私计算会成为必需的基础设施</strong>，核心思路是"数据尽量不动，让计算去找数据"。</p>
+<hr>
+<h2>一、出发点：AI 知道你很多事，但数据是散的</h2>
+<ul><li>手表知道睡眠，手机知道活动量，医院有检查报告，办公软件记录日程</li><li>但这些数据<strong>分散在不同平台，彼此不通</strong></li><li>所以再聪明的 AI，缺少"关于你的完整上下文"，也只能给泛泛的建议</li></ul>
+<blockquote><p>原文之问：当 AI 能回答几乎所有问题，我们距离真正"懂自己"的 AI 还有多远？</p></blockquote>
+<hr>
+<h2>二、Google 的方案：不要让一个大模型包办所有事情</h2>
+<h3>为什么不能只靠一个大模型</h3>
+<div class="table-wrap"><table><thead><tr><th>问题类型</th><th>例子</th><th>需要的能力</th></tr></thead><tbody><tr><td>常识问答</td><td>"成年人该睡多久"</td><td>通用知识</td></tr><tr><td>个人数据分析</td><td>"我最近三个月睡眠变差了吗？跟运动量有关吗？"</td><td>真实数据 + 统计计算 + 医学解释 + 持续反馈</td></tr></tbody></table></div>
+<p>这两类问题的<strong>评判标准完全不同</strong>：计算要准、医学解释要有证据、健康建议要适合个人且可执行。一个模型很难都做好。</p>
+<h3>PHA 的三个角色 + 一个调度员</h3>
+<blockquote><p>Google PHA = Personal Health Agent，基于 Gemini 2.0 模型家族构建。</p></blockquote>
+<p><strong>1. 数据科学 Agent（分析师）</strong></p>
+<ul><li>把模糊问题翻译成明确指标："我最近是不是越来越累" → 看睡眠时长、活动量、心率</li><li>然后<strong>自己写代码、跑趋势</strong>，而不是凭语言直觉编答案</li><li>论文数据：分析计划质量 <strong>75.6%</strong>（基础模型 53.7%）；代码首次跑通率 <strong>75.5%</strong>，自我纠错后 <strong>79.0%</strong></li><li>价值在于形成"先规划、再执行、可复查"的闭环</li></ul>
+<p><strong>2. 领域专家 Agent（医学顾问）</strong></p>
+<ul><li>把个人数据与医学证据对上号，并给出<strong>可追溯的出处</strong></li><li>注意：<strong>不等于独立临床诊断</strong></li><li>论文数据：用户认为回答"可信"的比例 <strong>96.9%</strong>（基础模型 38.7%）</li><li>差距主要来自"能不能拿出证据"，而不是"说得顺不顺"</li></ul>
+<p><strong>3. 健康教练 Agent（教练）</strong></p>
+<ul><li>不回答完就结束，而是围绕目标设定、行为障碍、用户反馈持续调整</li><li>价值从"回答一个问题"转向"帮你完成长期目标"</li><li>论文数据：主动倾听 <strong>75.8%</strong>（基础模型 64.1%）</li><li>配套要求：长期记忆、授权期限、用户撤销权必须进系统设计</li></ul>
+<p><strong>4. 协调器（调度员）</strong></p>
+<ul><li>根据任务动态决定该叫谁来做</li><li><strong>关键不是 Agent 数量多，而是每个环节交给最擅长的那个</strong></li></ul>
+<hr>
+<h2>三、论文真正值钱的地方：系统性评测，不是排行榜</h2>
+<p><strong>评测规模</strong></p>
+<ul><li>基于真实多模态健康数据集（WEAR-ME 研究）</li><li>10 项基准任务、7000+ 条标注、约 1100 小时人工评估</li><li>覆盖：数据分析、专业知识、多模态理解、用户体验、安全性</li></ul>
+<p><strong>核心结论</strong></p>
+<ul><li>动态协调的专业智能体，在多项测试中<strong>优于单一智能体或简单并行组合</strong></li></ul>
+<p><strong>两点冷静提醒（原文明确强调）</strong></p>
+<ol><li>评测分数高 ≠ 真的改善了长期健康结局</li><li>健康建议质量提升 ≠ 错误解释与不当建议的风险消失</li><li>要进真实医疗服务，还需要：独立临床验证 + 安全审查 + 持续监测</li></ol>
+<hr>
+<h2>四、文章的重点转向：真正的难题是"数据怎么才能放心共享"</h2>
+<p>这是「开放隐私计算」自己的观点：数据越多越敏感，<strong>越不能把所有原始数据搬到同一个中心</strong>。 健康记录、支付信息、日程聊天，敏感程度、授权边界、责任主体各不相同。</p>
+<h3>下一代个人 Agent 需要的四种能力</h3>
+<ol><li><strong>计算靠近数据</strong> —— 而不是默认把原始数据搬离设备或机构</li><li><strong>授权要具体</strong> —— 绑定到具体任务、时间、用途、输出</li><li><strong>可验证身份 + 最小权限</strong> —— 每个 Agent 有自己的身份，不能一个通吃</li><li><strong>全程可审计</strong> —— 工具调用、结果来源、跨 Agent 传递都要留痕</li></ol>
+<h3>一个重要的技术判断</h3>
+<ul><li>TEE（可信执行环境）、MPC（多方安全计算）、端侧计算、联邦学习、差分隐私</li><li><strong>各有各的适用范围，不能相互替代</strong>；</li><li>DID 与可验证凭证也只是"身份"这一层的候选方案，单靠它们解决不了隐私问题。</li><li><strong>必须根据具体威胁模型进行组合设计。</strong></li></ul>
+<hr>
+<h2>五、展望：从个人健康助手到 Personal AgentOS</h2>
+<p>把 Google 的专业分工思路扩展到整个数字生活：</p>
+<div class="table-wrap"><table><thead><tr><th>Agent</th><th>职责</th></tr></thead><tbody><tr><td>健康 Agent</td><td>理解身体状态</td></tr><tr><td>文件 Agent</td><td>理解个人知识</td></tr><tr><td>日程 Agent</td><td>协调时间</td></tr><tr><td>设备 Agent</td><td>提供硬件能力</td></tr></tbody></table></div>
+<p><strong>原则：不共享全部原始数据，只按授权交换"必要的计算结果"和"操作能力"。</strong></p>
+<p><strong>举例</strong></p>
+<blockquote><p>你说："结合最近睡眠、运动和工作安排，制定一个能坚持的训练计划。"</p></blockquote>
+<p>&gt;</p>
+<blockquote><p>协调器 → 健康 Agent 给出约束条件 → 日程 Agent 提供可用时段 → 运动 Agent 形成计划 → 把证据与执行状态一起返回给用户。</p></blockquote>
+<p><strong>最本质的变化</strong></p>
+<blockquote><p>从"平台拥有你的所有数据" → 变成"<strong>用户管理不同数据能力的使用权</strong>"。</p></blockquote>
+<hr>
+<h2>六、结论：数据可以成为养料，但不能成为无限收集的理由</h2>
+<ul><li>数据越丰富，个性化越强；但——</li><li><strong>记忆 ≠ 永久保存</strong></li><li><strong>学习 ≠ 默认拿去训练</strong></li><li><strong>协作 ≠ 无限制共享</strong></li><li>一个值得信任的 Agent 网络，必须让用户随时知道：</li></ul>
+<ol><li>谁访问了什么数据</li><li>为什么访问</li><li>执行了什么计算</li><li>产生了什么结果</li><li>如何撤销权限</li></ol>
+<ul><li>敏感任务还应允许用户<strong>审查关键证据</strong>、<strong>人工确认重要操作</strong></li><li>作者期待的下一站：不是"无所不知、无限拿数据的超级助手"，而是<strong>用户可控 + 专业 Agent 分工 + 可信计算托底</strong>的开放网络</li></ul>
+<ul><li>让数据保留在适当的位置，让计算在可信边界内发生，</li><li>让 Agent 在明确授权下协作，让价值最终回到用户自己。</li></ul>
+<hr>
+<h2>七、阅读提醒：分清"研究结果"与"作者展望"</h2>
+<p>原文文末有作者自己的声明，读的时候要把两层分开看：</p>
+<div class="table-wrap"><table><thead><tr><th>层次</th><th>内容</th><th>性质</th></tr></thead><tbody><tr><td>第一层</td><td>Google PHA 架构、三个 Agent、评测数据</td><td>论文中真实做过、评过</td></tr><tr><td>第二层</td><td>Personal AgentOS、DID、TEE、MPC 组合设计</td><td><strong>作者的技术展望，并非 Google 已实现验证的功能</strong></td></tr></tbody></table></div>
+<p>具体实验数值，应以正式论文及其补充材料为准。</p>
+<hr>
+<h2>八、参考资料</h2>
+<ol><li>The anatomy of a personal health agent. <em>Nature</em> (2026). DOI: 10.1038/s41586-026-11161-8</li></ol>
+<p>https://www.nature.com/articles/s41586-026-11161-8</p>
+<ol><li>Google Research Blog. The anatomy of a personal health agent.</li></ol>
+<p>https://research.google/blog/the-anatomy-of-a-personal-health-agent/</p>
+<ol><li>预印本. arXiv:2508.20148</li></ol>
+<p>https://arxiv.org/abs/2508.20148</p>
+<hr>
+<h2>九、我的追问（待补充）</h2>
+<ul><li>PHA 的"协调器"具体是怎么路由任务的？规则式还是学习式？</li><li>96.9% 的"可信"是主观评分，样本量和评估设计是怎样的？</li><li>隐私计算五件套（TEE/MPC/端侧/FL/DP）在 Agent 场景下的开销对比有无实测数据？</li><li>"计算靠近数据"在跨机构健康数据上，落地路径是什么？</li></ul>
+<hr>
+<p><em>笔记整理自公开文章，仅供学习参考。</em></p>
+      </div>
+      <a class="back" href="index.html">← 全部笔记</a>
+    </article>
+    <footer class="foot">
+      <p>© <span id="year">2026</span> 祝蕊</p>
+      <p>最后更新 2026.11.08</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/js/main.js?v=90a6ca45"></script>
+<script src="../assets/js/leaves.js?v=90a6ca45"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

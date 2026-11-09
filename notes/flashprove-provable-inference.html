@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic FlashProve：大模型的可证明推理 · 祝蕊</title>
+<meta name="description" content="给每条模型回复附一张「数学收据」，几秒内验证它确实出自那个模型，且不泄露权重。Anthropic 把生成速度提升了几千倍，代码与形式化证明全部开源。">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Anthropic FlashProve：大模型的可证明推理 · 祝蕊">
+<meta property="og:description" content="给每条模型回复附一张「数学收据」，几秒内验证它确实出自那个模型，且不泄露权重。Anthropic 把生成速度提升了几千倍，代码与形式化证明全部开源。">
+<link rel="canonical" href="https://imzhurui.github.io/notes/flashprove-provable-inference.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/style.css?v=90a6ca45">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      var mo = new Date().getMonth() + 1;
+      var se = mo < 3 ? 'winter' : mo < 6 ? 'spring' : mo < 9 ? 'summer' : mo < 12 ? 'autumn' : 'winter';
+      var savedSe = localStorage.getItem('season');
+      if (savedSe && savedSe !== 'auto') se = savedSe;
+      document.documentElement.dataset.season = se;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<canvas id="leaves" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"></div>
+<div class="frame">
+  <aside class="side">
+    <div>
+      <p class="kicker">个人主页</p>
+      <p class="brand"><a href="../index.html">祝蕊</a></p>
+      <p class="role">山东大学 · 网络空间安全学院 · 密码科学与技术 2024 级</p>
+      <nav class="nav" aria-label="主导航">
+      <a href="../research.html"><span>01</span>研究</a>
+      <a href="../notes/index.html" aria-current="page"><span>02</span>笔记</a>
+      <a href="../reading.html"><span>03</span>在读</a>
+      <a href="../about.html"><span>04</span>关于</a>
+      </nav>
+    </div>
+    <div class="side-foot">
+      <a href="mailto:1702732426@qq.com">1702732426@qq.com</a>
+      <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <button class="theme-toggle" type="button">深色 / 浅色</button>
+      <button class="season-toggle" type="button">季节</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+    <article>
+      <header class="article-header">
+        <p class="meta">2026 年 11 月 9 日 · 完成</p>
+        <h1>Anthropic FlashProve：大模型的可证明推理</h1>
+        <p class="article-tags">论文笔记 · 可证明推理</p>
+      </header>
+      <div class="prose">
+<ul><li>来源：Anthropic Research 博客 + FlashProve 技术报告（开源项目）</li><li>原文标题：FlashProve: An open-source library for provable inference</li><li>原文链接：https://www.anthropic.com/research/provable-inference</li><li>技术报告：https://www.anthropic.com/document/flashprove-technical-report</li><li>代码仓库：https://github.com/anthropics/FlashProve （Apache 2.0）</li><li>作者：Roy Rinberg、Alex Allain（Anthropic）；Alessandro Chiesa、Giacomo Fenzi、Guy Weissenberg（EPFL）；Miranda Christ（MIT）；Rahul Dalal（Anthropic / Succinct）；Ben Mayer（Anthropic / MIT）</li><li>关键词：可证明推理 · zkSNARK · zkML · 零知识 · 形式化验证 · Lean · MoE</li><li>整理日期：2026-11-09</li></ul>
+<hr>
+<h2>一句话概括</h2>
+<p>以前你没法查证 AI 回复到底出自哪个模型；现在可以给每条回复附一张"数学收据"，几秒钟就能验证它确实出自那个模型，而且不泄露模型参数。Anthropic 把这个"收据生成器"的速度提升了<strong>几千倍</strong>，并把代码、形式化证明全部开源。</p>
+<blockquote><p><strong>核心贡献不是新算法，而是把密码学（zkSNARK）、zkML 与工程优化"组合"起来——第一次让"证明一个 4000 亿参数大模型的推理"快到可用。</strong></p></blockquote>
+<hr>
+<h2>一、问题：你无法确认回复到底出自哪个模型</h2>
+<p>想象你打电话给一家公司，对方自称是"某某本人"，但你既看不见也摸不着，只能听声音。<strong>AI 就是这个状态。</strong></p>
+<p>你给模型发一句话，收到回复，但你没法确认：</p>
+<ul><li>背后运行的<strong>真的是</strong>你指定或付费购买的那个模型吗？服务商可能为了省钱，悄悄换成小号或便宜模型。</li><li>会不会有<strong>攻击者</strong>入侵服务器，冒充模型给你发回复（比如夹带恶意链接）？</li></ul>
+<p><strong>光看回复的质量没用</strong>——便宜模型有时也能说得头头是道。</p>
+<h3>四个具体场景（原文的四类"挑战"）</h3>
+<div class="table-wrap"><table><thead><tr><th>场景</th><th>具体担忧</th><th>可证明推理能做什么</th></tr></thead><tbody><tr><td><strong>① 节奏控制（pacing）</strong></td><td>监管要求"算力只能做推理、不能偷偷训练新模型"，公司自己说了算，谁信？</td><td>提交时段内推理请求的证明；监管者不用自建机房、也不用拿到权重即可核验</td></tr><tr><td><strong>② 篡改检测</strong></td><td>服务器被入侵，或更先进的模型"顶替"被授权模型运行以绕过监控</td><td>证明绑定到权重承诺；拿不到正确权重的证明就必然暴露</td></tr><tr><td><strong>③ 文本溯源</strong></td><td>开发者宣称"我的代码经过某前沿模型扫描、烧了一百万 token 没找到漏洞"，用户怎么验证？</td><td>每条输出附证明；可用"失败证明"（proof-of-failure）证明投入量</td></tr><tr><td><strong>④ 模型审批</strong></td><td>监管只允许上线安全模型，公司有动机偷跑高风险模型</td><td>强制附证明；用未获批模型则证明无法通过</td></tr></tbody></table></div>
+<blockquote><p>⚠️ 原文明确承认场景①的<strong>边界</strong>：这只能证明"硬件在做推理"，<strong>不能证明硬件没有同时在偷偷训练</strong>。</p></blockquote>
+<h3>为什么"公开权重"不是解法</h3>
+<p>原理上公开架构和权重就能验证，但：</p>
+<ul><li>大多数提供方<strong>不愿公开</strong>权重（商业机密）；</li><li><strong>即便拿到权重，普通用户也算力不够</strong>——跑一遍模型就要 H100 级别硬件。</li></ul>
+<p>所以需要的是一种"<strong>我不会算，但我能查</strong>"的机制。</p>
+<hr>
+<h2>二、技术路线：zkSNARK 是什么</h2>
+<p><strong>zkSNARK = 零知识简洁知识论证</strong>，拆开看三个词：</p>
+<ul><li><strong>零知识</strong>：验证者能确认"计算是对的"，但<strong>看不到模型权重和中间过程</strong>——模型还是个黑盒。</li><li><strong>简洁</strong>：一张收据只有几兆，验证只要几秒，<strong>不需要 GPU、不需要模型文件</strong>。</li><li><strong>论证</strong>：造假在计算上不可行（等价于破解底层密码学假设），所以验证者<strong>无需信任证明者</strong>。</li></ul>
+<p><strong>流程分两步：</strong></p>
+<ol><li><strong>离线（一次）</strong>：服务商对模型权重生成一个很短的"指纹"并公布出去，等于公开声明"我承诺用这套权重"。权重本身是隐藏的。</li><li><strong>在线（每次请求）</strong>：服务商给出回复，并附上证明："刚才那个被承诺的模型，在这个输入上确实会输出这些 token。"</li></ol>
+<p>任何人拿到「指纹 + 问题 + 回复 + 证明」，用普通电脑即可验证真假。</p>
+<h3>两条路线的对比：硬件 vs 纯软件</h3>
+<div class="table-wrap"><table><thead><tr><th></th><th>可信执行环境（TEE）</th><th>纯软件密码学（本文路线）</th></tr></thead><tbody><tr><td>安全依赖</td><td>制造商做出<strong>防篡改硬件</strong></td><td><strong>计算问题的困难性</strong></td></tr><tr><td>环境被攻破</td><td>安全性可能崩塌</td><td>只要不破解密码学假设，<strong>仍无法伪造证明</strong></td></tr><tr><td>是否需要信任厂商</td><td>是</td><td>否（透明设置）</td></tr></tbody></table></div>
+<blockquote><p>原文立场：两者<strong>互补</strong>，各有不同的保证与权衡，都会在应对信任挑战中发挥作用。</p></blockquote>
+<hr>
+<h2>三、FlashProve 的成绩单</h2>
+<p>测试对象：<strong>Llama 4 Maverick</strong> —— 4000 亿参数 MoE 模型，128 个专家，每个 token 只用约 170 亿参数；<strong>4 比特量化</strong>；目标安全级别 <strong>128 比特</strong>。</p>
+<h3>证明者侧（单张 H100 + 24 CPU 核心）</h3>
+<div class="table-wrap"><table><thead><tr><th>项目</th><th>数值</th></tr></thead><tbody><tr><td>生成证明速度</td><td>约 <strong>110 token/秒</strong></td></tr><tr><td>单份证明大小</td><td><strong>18.78 MB</strong>（对应 1024 token 请求）</td></tr><tr><td>离线承诺阶段</td><td>约 <strong>39 分钟</strong>（每模型一次）</td></tr><tr><td>离线产物大小</td><td><strong>2.15 GB</strong></td></tr><tr><td>承诺可支撑请求数</td><td>约 <strong>1600 万次</strong></td></tr><tr><td>权重占用</td><td>232 GB，存主机内存，流式载入 80 GB GPU</td></tr></tbody></table></div>
+<h3>验证者侧（普通 CPU，无需 GPU）</h3>
+<div class="table-wrap"><table><thead><tr><th>项目</th><th>数值</th></tr></thead><tbody><tr><td>一次性下载（承诺 + 离线证明 + 链接）</td><td><strong>6.24 MB</strong></td></tr><tr><td>每请求下载</td><td>一份证明（约 19 MB）</td></tr><tr><td>检查一份证明</td><td>24 线程 <strong>17 秒</strong> / 单线程 21 秒</td></tr><tr><td>是否需要模型权重</td><td><strong>不需要</strong></td></tr></tbody></table></div>
+<h3>相比直接跑模型</h3>
+<p>用 vLLM 在 8×H100 上跑同模型 FP8 版做基准：按<strong>每张 GPU</strong> 计，证明一批 24 个请求的时间约为 vLLM 一次性处理这批请求的 <strong>72 倍</strong>（各次介于 66–77 倍）；vLLM 在最高负载下约 <strong>94 倍</strong>。</p>
+<hr>
+<h2>四、和以前比，量级差多少</h2>
+<p>同一个模型（Llama 4 Maverick）此前唯一做过的工作是 VerInf：</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>VerInf（以前）</th><th>FlashProve（现在）</th></tr></thead><tbody><tr><td>速度</td><td>0.02 token/秒</td><td><strong>110 token/秒</strong></td></tr><tr><td>1000 个 token 要多久</td><td><strong>14.3 小时</strong></td><td>约 <strong>9 秒</strong></td></tr><tr><td>证明大小</td><td><strong>93.6 GB</strong></td><td><strong>19 MB</strong></td></tr><tr><td>验证要多久</td><td>接近一天</td><td>17 秒</td></tr></tbody></table></div>
+<p><strong>约 5000 倍</strong>。差距主要来自"折叠式 IOP + 批处理 + 分段流式 + DAG 并行"的合力，<strong>而不是某个单点突破</strong>。</p>
+<h3>其他工作的位置（原文第 6 节梳理）</h3>
+<div class="table-wrap"><table><thead><tr><th>工作</th><th>模型</th><th>速度</th></tr></thead><tbody><tr><td>SafetyNets (2017)</td><td>MNIST CNN（两层卷积）</td><td>—</td></tr><tr><td>zkCNN (2021)</td><td>VGG-16（1500 万参数）</td><td>88.3 秒/证明</td></tr><tr><td>zkML GPT-2 (2024)</td><td>GPT-2（1.17 亿）</td><td>~0.006 tok/s</td></tr><tr><td>zkLLM (2024)</td><td>LLaMA-2-13B</td><td>~0.001 tok/s（按新增 token）</td></tr><tr><td>zkGPT (2025)</td><td>GPT-2</td><td>~0.05 tok/s</td></tr><tr><td>ZKTorch (2025)</td><td>GPT-J（60 亿）</td><td>~0.001 tok/s</td></tr><tr><td>VerInf</td><td><strong>Llama 4 Maverick</strong></td><td>~0.02 tok/s</td></tr><tr><td>DeepProve（同行评审 SOTA）</td><td>GPT-2 / Gemma 3</td><td>2.9 / 1.4 tok/s；分布式 31 tok/s</td></tr><tr><td>Attestable（商业）</td><td>Gemma 4 31B</td><td>53–77 tok/s（<strong>未开源</strong>）</td></tr><tr><td><strong>FlashProve</strong></td><td><strong>Llama 4 Maverick</strong></td><td><strong>110 tok/s</strong></td></tr></tbody></table></div>
+<blockquote><p>作者的判断：这一进展<strong>应能迁移到更多模型和架构</strong>，形成相对原生计算开销约"两个数量级"（70–95 倍）的通用工具，<strong>远低于此前的预期</strong>。</p></blockquote>
+<hr>
+<h2>五、证明系统的三层骨架</h2>
+<p>这是理解全文的钥匙。FlashProve 属于 <strong>STARK 这一支</strong>（虽统一叫 zkSNARK），由三层叠起来：</p>
+<div class="table-wrap"><table><thead><tr><th>层</th><th>内容</th><th>解决什么</th></tr></thead><tbody><tr><td><strong>① IOP</strong>（信息论层）</td><td>证明者发"很长的串"，验证者只做少量<strong>点查询</strong></td><td>让验证的工作量远小于计算量</td></tr><tr><td><strong>② Merkle 承诺（BCS 变换）</strong></td><td>把"长串"换成短承诺 + 按需打开</td><td>让验证者不必真的收下长串</td></tr><tr><td><strong>③ Fiat–Shamir</strong></td><td>把交互折叠成一条消息</td><td>变成非交互、可离线验证</td></tr></tbody></table></div>
+<p><strong>关键取舍</strong>：第②③层是"正交的"，跟你要证明什么无关，可以直接复用。所以他们把工程量压在第①层——<strong>为 MoE 推理专门设计一个 IOP</strong>。</p>
+<blockquote><p>原文说法：系统的绝大部分只涉及信息论构造，<strong>非常适合自动化形式化和优化</strong>。</p></blockquote>
+<h3>为什么选"只依赖哈希函数"</h3>
+<p>只依赖 <strong>BLAKE2</strong> 的表现像随机函数，不依赖椭圆曲线或格：</p>
+<ul><li><strong>好处</strong>：透明设置（无信任初始化仪式）、<strong>后量子安全</strong>、假设面最小。</li><li><strong>代价</strong>：证明更大更慢——这就是为什么是 19 MB 而不是几百字节。</li></ul>
+<blockquote><p>论证逻辑：结构化假设（椭圆曲线、格）未来可能被算法攻击得更狠，而"哈希像随机函数"这个假设非常抗打。<strong>这是一条用效率换假设保守性的路线。</strong></p></blockquote>
+<hr>
+<h2>六、第一层：把"计算"变成"可抽查的编码"</h2>
+<p>IOP 的核心直觉，原文给了一个漂亮的类比：</p>
+<blockquote><p><strong>纠错码之于信息，正如 IOP 之于计算。</strong></p></blockquote>
+<ul><li>纠错码给消息加<strong>冗余</strong>，所以码字坏几个位置还能还原；</li><li>IOP 给<strong>计算</strong>加<strong>冗余</strong>，所以验证者只查几个位置就能判断一个大计算对不对。</li></ul>
+<p><strong>为什么必须冗余？</strong> 如果证明者老实把计算过程全发过来，验证者就得全读一遍，<strong>简洁性归零</strong>。冗余让"抽查几个点"就足以高概率抓住撒谎。</p>
+<h3>四个关键构件</h3>
+<p><strong>① 零知识编码（ZK code）</strong></p>
+<p>证明者要先发"编码后的私有数据"（权重、轨迹）。但<strong>查询的答案会泄露信息</strong>——你问第 37 个位置，答案就跟你说了那里是什么。ZK 码的作用是：用随机性编码，使得<strong>有限次数的位置查询不泄露被编码消息的任何信息</strong>。</p>
+<p>→ 这直接引出后面的大麻烦（<strong>查询预算</strong>），见第九节。</p>
+<p><strong>② Sumcheck（求和检验）</strong></p>
+<p>把"检查多项式在<strong>很多点</strong>上的和"归约为"检查它在<strong>一个随机点</strong>上的值"。</p>
+<p>出现频率极高：<strong>每个请求约 2000 次 sumcheck，占全部交互轮次的 90–95%</strong>。用于折叠、查找子程序、以及把计算归约成线性声明。</p>
+<blockquote><p>换句话说，<strong>整个系统的节拍器就是 sumcheck</strong>。这也是形式化验证可行的原因——主循环简单得像 for 循环。</p></blockquote>
+<p><strong>③ 折叠 + 跳转（fold and hop）</strong></p>
+<p>每轮归约后得到一条<strong>线性声明</strong>："向量 v 与编码消息 m 的内积 = y"。但这条声明<strong>跟计算一样大</strong>，不缩小就没有简洁性。所以：</p>
+<ul><li><strong>折叠</strong>：把多个"堆叠"的编码（code interleaving，<strong>交织码</strong>）用 sumcheck <strong>压扁</strong>成一个小得多的编码，产出关于它的新声明；</li><li><strong>跳转</strong>：用 <strong>code switching</strong> 从一个码换到另一个码，目标是换到<strong>更适合小规模</strong>的码（"码率提升"）。</li></ul>
+<p>选 <strong>Reed–Solomon 码</strong>，因为编码快、且天生有好的零知识性质。这套思路与 FRI → BaseFold / Blaze / WHIR 一系最前沿工作同源。</p>
+<p><strong>④ 列表译码与域外采样（最不直观的部分）</strong></p>
+<p><strong>邻近性参数</strong>决定效率：允许预言机离诚实码字有多"远"还能被接受。参数越大越高效，但<strong>分析越难</strong>。他们工作在<strong>列表译码区间</strong>——此时"离得近的码字可能有好多个"，所以需要：</p>
+<ul><li><strong>域外采样</strong> 把候选压成唯一一个；</li><li>最前沿的 <strong>RS 码互相关一致性定理</strong> 来支撑分析。</li></ul>
+<blockquote><p>这里是全篇<strong>最"吃数学"</strong>的地方：性能提升的一大半来自"把分析推到极限"，而不是代码写得好。</p></blockquote>
+<hr>
+<h2>七、第二层：Merkle 承诺 = 可寻址的短承诺</h2>
+<p>矛盾很直白：直接发长证明 → 简洁性没了；让证明者自己回答查询 → 他可以撒谎。</p>
+<p><strong>解法：先承诺、后打开。</strong> 哈希树给长向量一个短承诺；之后要打开某个位置，就给出该位置的值 + 一条<strong>认证路径</strong>，对着承诺验证。</p>
+<p><strong>这解释了 19 MB 的来源</strong>：证明里塞的主要是<strong>打开的路径</strong>（Merkle 路径）和一些域元素，<strong>不是整个计算轨迹</strong>。</p>
+<hr>
+<h2>八、第三层：Fiat–Shamir 的 DAG 改造</h2>
+<blockquote><p>这是全文<strong>最有意思的工程创新</strong>。</p></blockquote>
+<p>标准 Fiat–Shamir 是<strong>严格串行</strong>的：第 i 轮的挑战 = H(此前全部记录)，第 i 轮必须等第 i−1 轮哈希完成。</p>
+<p><strong>这和 GPU 是天敌。</strong> 单卡 H100 要同时跑几十个请求才喂得饱，但串行哈希链逼你一个一个来。</p>
+<h3>解法：把哈希链从"一条"改成"分叉再汇合的 DAG"</h3>
+<ol><li>每个请求跑自己的<strong>前导段</strong>（分段、查找、约 2000 次 sumcheck），彼此<strong>独立</strong>；</li><li>所有请求关于权重的声明<strong>汇合</strong>到一个<strong>共享邻近性测试</strong>——汇合点是一棵基于各链末端值的<strong>小 Merkle 树</strong>，共享链从树根开始；</li><li>之后每条链<strong>再分叉回自己</strong>的收尾轮次。</li></ol>
+<p><strong>效果</strong>：一个请求的<strong>串行哈希</strong>可以和另一个请求的<strong>重承诺工作</strong>在 GPU 上重叠。</p>
+<blockquote><p>本质是把"密码学协议的串行性"和"GPU 的并行性"对齐。</p></blockquote>
+<h3>安全怎么补？逐轮可靠性</h3>
+<p>串行链里，一个挑战绑定它之前<strong>全部</strong>记录；DAG 里，一个挑战只绑定它依赖的<strong>分支</strong>。作弊者有了新自由度：</p>
+<ul><li>先用 A 链的结果去挑 B 链的消息；</li><li>或反复重抽某条分支</li></ul>
+<p><strong>补丁</strong>：用一个更强的性质——<strong>逐轮可靠性（round-by-round soundness）</strong>：每一轮单独就"不会把假陈述变得更容易蒙混"，于是 DAG 的任意合法求值顺序都安全。他们为所有子协议都证了这个性质（带明确误差界），最终 IOP 继承它。</p>
+<blockquote><p>这是"<strong>协议安全性质的选择，被硬件执行模型倒逼出来</strong>"的典型案例。</p></blockquote>
+<hr>
+<h2>九、"承诺-证明"带来的两个新麻烦</h2>
+<p>普通 zkSNARK 是"一次性"的：证一次，结束。这里不一样——<strong>权重承诺一次，之后几百万个请求都对着同一承诺证明</strong>。这打破了两条性质：</p>
+<h3>麻烦 1：绑定性与隐私要同时成立</h3>
+<ul><li><strong>绑定</strong>：不能为"不是承诺的那套权重"出证明；</li><li><strong>隐私</strong>：承诺要能<strong>反复使用</strong>而不泄露权重。</li></ul>
+<h3>麻烦 2：查询预算（最漂亮的一处设计）</h3>
+<p>一个 ZK 编码只有在<strong>被查询次数有限</strong>时才能隐藏消息。但每份证明都要读一批位置 → 读着读着预算就耗光了。</p>
+<p><strong>解法：链接证明（linked proofs）</strong></p>
+<ol><li>先证"第一份编码是良构的"；</li><li>然后用<strong>新的随机性</strong>发出<strong>同一套权重的更多编码</strong>，每份附一个"与第一份编码持有相同权重"的链接证明；</li><li>请求的证明使用这些<strong>后续编码</strong>，于是没有任何一份编码被读超预算；</li><li>一个承诺能支撑的证明数 = 链接编码的数量。</li></ol>
+<p>→ 这就是"<strong>离线承诺约可用 1600 万次请求</strong>"的来源。</p>
+<blockquote><p>思路明确借鉴自基于哈希的签名里"<strong>一次性签名 → 多次签名</strong>"的提升（Merkle 树那套）。</p></blockquote>
+<hr>
+<h2>十、zkML 侧：三个"顺着模型结构省钱"的决定</h2>
+<p>这一层是<strong>把密码学成本对准模型结构</strong>，而不是硬算。</p>
+<h3>① MoE 天生对证明者友好（最关键）</h3>
+<p>Llama 4 Maverick：128 个专家，每 token 只跑 1 个 + 1 个共享专家，<strong>4000 亿权重里只用 170 亿</strong>。</p>
+<ul><li>证明者工作量可以和模型的实际工作量<strong>同阶</strong>，而不是按 4000 亿算；</li><li>轨迹里只放<strong>被选中的专家</strong>的值 + <strong>选择本身</strong>；</li><li>检查选择：只需路由器那个小矩阵乘 + 一次比较，相对单个专家的矩阵乘<strong>很小</strong>；</li><li><strong>零知识怎么保</strong>：选择用<strong>指示向量</strong>表示，验证者把"被选专家的乘积"当成"所有专家按指示向量加权求和"来检查 → 它对权重的查询<strong>不依赖到底选了哪个专家</strong>。</li></ul>
+<blockquote><p>这是全文技术密度最高的地方之一：<strong>同时解决了"省算力"和"不泄露选了谁"两个目标</strong>——因为"选了谁"本身就泄露权重信息。</p></blockquote>
+<h3>② 量化让整数运算 = 域运算</h3>
+<p>IOP 工作在有限域 F_p 上。只要所有值一直落在 [0, p) 内，<strong>整数运算和域运算就完全一致</strong>。</p>
+<p>→ 代价：你得<strong>全程</strong>保证值不越界，还得<strong>让验证者相信</strong>它没越界（→ 范围检查，见第十一节）。</p>
+<h3>③ 查找表处理非线性</h3>
+<p>softmax、SiLU、ReLU、比较这些，用域上算术表达<strong>极贵</strong>。查找协议的思路是：非线性函数<strong>公开已知</strong>，像三角函数表一样写下来，证明者只需声称"我每个 (x, f(x)) 都是表里的一行"。</p>
+<p>→ 表必须<strong>小</strong>，否则复杂度爆掉。所以他们对输入做了截断：SiLU 超出范围就截断，softmax 的指数舍入到零。</p>
+<hr>
+<h2>十一、真实实现与"教科书版"的三处偏离</h2>
+<p>原文很老实地列了简化版和实际版的差别。<strong>每条都是拿安全/简洁换工程可行性</strong>：</p>
+<h3>① 批处理（省查询预算）</h3>
+<ul><li>简化版：一个请求，对权重编码做一次邻近性测试。</li><li>实际版：一批请求一起证，<strong>各自保留自己的轨迹预言机和归约</strong>，但<strong>关于权重的声明合并</strong>，于是<strong>每批只打开一次权重承诺</strong>。</li><li>好处：对编码的查询次数大幅下降，<strong>这对 ZK 查询预算至关重要</strong>。</li><li>且每个客户端只收到自己那部分 + 共享部分，<strong>连"这批有几个请求"都不泄露</strong>。</li></ul>
+<h3>② 分段（这是"单卡"的核心）</h3>
+<ul><li>简化版要把整条轨迹 + 编码一直握在手里 → <strong>远超一张 GPU 的容量</strong>。</li><li>实际版把层切成<strong>段</strong>：发一段的轨迹、归约它的声明、只把下一段需要的少量值往前传 → GPU 内存里一次只有一段。</li><li>代价：<strong>轮次变多</strong>，各段依次证明。</li></ul>
+<h3>③ 近似范围检查（最诚实的一处妥协）</h3>
+<ul><li>简化版：轨迹每个值做一次查找。太贵。</li><li>实际版：检查整个矩阵条目的<strong>随机和</strong>。</li><li>代价是<strong>完备性不完美</strong>：诚实值之和可能偶然很大，<strong>诚实证明者偶尔被拒</strong>（概率极小）。</li><li>更麻烦的是：<strong>被拒的请求可能泄露权重信息</strong>（因为"被拒"本身就是个信号）。补丁是<strong>换随机性重试</strong>；原文明确写"计划在未来版本解决"。</li></ul>
+<blockquote><p>⚠️ 值得注意：<strong>零知识性在这里不是"证明过的性质"，而是"用重试维持的工程性质"。</strong></p></blockquote>
+<hr>
+<h2>十二、Lean 形式化：证明了什么、没证明什么</h2>
+<blockquote><p>这决定整套东西的可信度边界。</p></blockquote>
+<h3>证明了的（Lean 里机器检查）</h3>
+<ol><li>一个形式化关系 R，刻画"给定模型的全部正确推理计算"；</li><li>三个性质：<strong>完备性、可靠性、零知识性</strong>，在<strong>随机预言机模型（ROM）</strong>里，带<strong>明确误差界</strong>；</li><li>协议本身（证明者函数、验证者函数）；</li><li>主定理："该协议是 ROM 中 R 的论证系统，完备性误差 ≤ ε₁、可靠性误差 ≤ ε₂、ZK 误差 ≤ ε₃"。</li></ol>
+<h3>没证明的（信任缺口）</h3>
+<ul><li><strong>C++/GPU 代码与 Lean 规范不等价</strong>，且证明者代码是 <strong>AI 从 Lean 生成</strong>的；</li><li><strong>技术论文本身是 AI 写的、未详审</strong>（原文自己写明）；</li><li>Lean 内核 + 编译器要信任；</li><li><strong>批量请求的零知识性还没证明</strong>（单请求已证）。</li></ul>
+<h3>一个漂亮的非对称性（整套设计的"支点"）</h3>
+<div class="table-wrap"><table><thead><tr><th>性质</th><th>只需信任谁</th><th>代码出错会怎样</th></tr></thead><tbody><tr><td><strong>可靠性</strong></td><td><strong>只有验证者</strong></td><td>证明者代码出错<strong>不影响</strong>可靠性</td></tr><tr><td><strong>完备性</strong></td><td>双方诚实（非对抗）</td><td>出错 → 诚实证明被拒（可用测试发现）</td></tr><tr><td><strong>零知识性</strong></td><td>只有证明者</td><td>出错 → 可能无意泄露权重</td></tr></tbody></table></div>
+<p><strong>所以</strong>："只要信任验证者，就完全不需要信任证明者"——这正是 zk 的全部价值。</p>
+<p>为此他们提供<strong>两个验证器</strong>：</p>
+<ul><li><strong>C++ 版</strong>（快，日常使用，无形式化保证，但测试中与 Lean 版逐份判定一致）；</li><li><strong>Lean 版</strong>（慢，但被证明"只接受可靠性定理里那个验证者所接受的内容"）。</li></ul>
+<p><strong>ZK 这块他们直接放弃辅助</strong>：证明者太贵，跑 Lean 版不现实，所以"希望隐藏权重的证明者，自己有钱做人工/智能体审计"。</p>
+<blockquote><p>一句话：<strong>可靠性有数学保证，完备性靠测试，零知识靠自觉 + 重试。</strong></p></blockquote>
+<hr>
+<h2>十三、性能数字怎么读</h2>
+<blockquote><p>别被"110 倍"误导。</p></blockquote>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>数值</th><th>怎么理解</th></tr></thead><tbody><tr><td>吞吐</td><td>110 tok/s</td><td><strong>批处理下的处理速率</strong>，不是单请求延迟</td></tr><tr><td>单请求延迟</td><td>约 <strong>5 分钟</strong>（等整批证明发布）</td><td>因为"没人在等证明"→ 事后证明</td></tr><tr><td>若改成逐个证</td><td>单份 <strong>58 秒</strong>就绪，但吞吐掉到 <strong>17.6 tok/s</strong></td><td>延迟 vs 吞吐的经典权衡</td></tr><tr><td>开销</td><td><strong>72 倍</strong>（66–77），高负载 <strong>94 倍</strong></td><td>对 vLLM 的<strong>预填充</strong>、按<strong>每张 GPU</strong> 计</td></tr><tr><td>验证</td><td>24 线程 <strong>17 秒</strong> / 单线程 21 秒</td><td>含离线阶段检查，<strong>不需要 GPU</strong></td></tr><tr><td>下载量</td><td>承诺 + 离线证明 + 链接共 <strong>6.24 MB</strong></td><td>一次性</td></tr><tr><td>离线阶段</td><td><strong>39 分钟</strong>，存 <strong>2.15 GB</strong></td><td>每模型一次，摊到 1600 万次请求 ≈ 可忽略</td></tr></tbody></table></div>
+<h3>三个容易误读的点</h3>
+<ol><li><strong>"110 tok/s"是和"vLLM 预填充"比的，不是和完整服务比。</strong></li></ol>
+<p>他们刻意选了<strong>预填充</strong>（计算受限、高度可并行），因为事后证明只需重算一次前向传播。真实服务的解码阶段是带宽受限、串行、效率低得多——所以"70–95 倍"这个分母<strong>其实是个对 vLLM 很有利的分母</strong>。</p>
+<ol><li><strong>检查每个 token 和不检查，速度几乎没差别</strong>（若只算被检查的 token，为 39.1 tok/s）。所以"一份证明只查一个 token"<strong>是测量口径，不是能力上限</strong>。</li></ol>
+<ol><li>批大小上限 <strong>64</strong>，实测用 24。</li></ol>
+<hr>
+<h2>十四、事后证明：省了 99%，但放弃了"阻止"</h2>
+<h3>为什么事后证明几乎免费？</h3>
+<ul><li>重算一次前向传播的代价 ≈ 1 次推理；</li><li>证明的代价 ≈ 70–95 次推理；</li><li>所以重算只给证明者增加 <strong>1%–1.5%</strong> 的工作量。<strong>在线证明省下的那点重算，完全不值得。</strong></li></ul>
+<p>更重要的是<strong>解耦</strong>：证明比推理贵一两个数量级，若同机运行会抢内存和带宽，直接伤害用户体验。用推理工程的术语说，这让团队可以专注优化<strong>证明预填充</strong>（可并行、计算受限），而非<strong>解码</strong>（串行、带宽受限）。</p>
+<h3>代价（原文讲得很坦率）</h3>
+<ol><li><strong>只能"发现"，不能"阻止"</strong>。用户先拿到回复，证明后补。所以"已篡改但会被发现"这件事，<strong>对已经中毒的用户没有意义</strong>。</li><li><strong>泄露型攻击仍可能成功</strong>：攻击者可以在"证明失败 → 运维发现服务器被入侵"这个信号发出<strong>之前</strong>，通过一条被篡改的回复<strong>泄露关键比特</strong>。</li><li><strong>必须信任日志</strong>：攻破日志的对手可以"日志里记模型的正确输出，实际发你篡改的输出"。</li></ol>
+<blockquote><p>所以他们把事后证明定位为<strong>纵深防御的一层</strong>，不是替代品。</p></blockquote>
+<hr>
+<h2>十五、局限清单（原文第 7 节）</h2>
+<div class="table-wrap"><table><thead><tr><th>局限</th><th>说明</th></tr></thead><tbody><tr><td><strong>研究原型</strong></td><td>不是产品</td></tr><tr><td><strong>整数 + 贪心解码</strong></td><td>证的是<strong>整数版模型的贪心选择</strong>；线上是<strong>浮点 + 采样</strong>，可能在某些位置偏离，<strong>不覆盖对抗性设计的提示</strong></td></tr><tr><td><strong>上下文仅 1024 token</strong></td><td>相对聊天场景太短，理想应扩展到数十万乃至百万 token</td></tr><tr><td><strong>架构不隐藏</strong></td><td>只藏权重；稠密模型的架构本身可能含 IP。未来可"连可执行代码一起承诺"</td></tr><tr><td><strong>侧信道</strong></td><td>如测量证明生成时间可能泄露权重信息，不在本次范围</td></tr><tr><td><strong>无多卡/张量并行</strong></td><td>单卡 80 GB + 主机 290 GB 才勉强跑 4000 亿模型</td></tr><tr><td><strong>快速代码无形式化保证</strong></td><td>C++/GPU 代码由 AI 从 Lean 生成，未证等价</td></tr><tr><td><strong>技术报告 AI 生成、未详审</strong></td><td>经审阅版本后续发布</td></tr><tr><td><strong>批量 ZK 未证</strong></td><td>单请求已证</td></tr></tbody></table></div>
+<hr>
+<h2>十六、批判性评价</h2>
+<h3>真突破（我认为可信）</h3>
+<ol><li><strong>把"4000 亿参数模型的推理证明"从"小时/GB 级"压到"秒/兆级"</strong>——这是可用的门槛线；</li><li><strong>DAG 化 Fiat–Shamir</strong>：把密码学前言的串行性和 GPU 并行性对齐，思路可迁移到其他 zkML 系统；</li><li><strong>MoE 的指示向量技巧</strong>：同时拿到效率和零知识，是真正的结构洞察；</li><li><strong>以 Lean 为"单一事实来源"，由它导出论文和代码</strong>：方法论样本，比结果更有价值；</li><li><strong>全开源 + 明确标注"AI 写的、未审"</strong>：这种自我披露在业界很少见。</li></ol>
+<h3>薄弱环节（部署前必须解决）</h3>
+<ol><li><strong>"证明的模型 ≠ 服务的模型"。</strong></li></ol>
+<p>证的是<strong>整数 + 贪心</strong>；线上是<strong>浮点 + 采样</strong>。这不是"小噪声"，而是<strong>在某些位置是不同的函数</strong>。现实威胁模型里，攻击者恰恰会挑这些位置。统计方法能区分良性数值噪声与篡改，但<strong>这是统计，不是证明</strong>——严格说，这一步把"可证明"降级成了"可检测"。</p>
+<ol><li><strong>架构不隐藏。</strong> 对"监管者能查、但别偷我 IP"这个用例，只藏权重不藏架构不够。</li></ol>
+<ol><li><strong>1024 token 上下文。</strong> 和真实聊天差两个数量级，而证明成本随上下文增长，<strong>外推并不平凡</strong>。</li></ol>
+<ol><li><strong>无多卡/张量并行。</strong> 对生产环境拓扑是硬约束。</li></ol>
+<ol><li><strong>argmax 检查的细节被略过。</strong> 要证明"这个 token 是词表里得分最高的"，需要在 20 万词表上做比较/最大值论证，而比较是非线性的 → 得靠查找或排序置换论证。<strong>这块的成本和安全性，报告没展开</strong>，值得追问。</li></ol>
+<ol><li><strong>"批量 ZK 未证" + "近似范围检查牺牲完备性"</strong>：两处都在系统最敏感的性质上开了口子。</li></ol>
+<ol><li><strong>安全目标 128 比特，但误差界的具体数值要自己核。</strong> 正文只写"这里 ε 是具体的小数"，<strong>看代码/Lean 才知道真实参数</strong>。</li></ol>
+<hr>
+<h2>十七、结论</h2>
+<blockquote><p><strong>这篇文章真正证明的不是"AI 安全"，而是"AI 供应链可审计"在技术上可行</strong>：你可以用一张 19 MB 的数学收据，证明某句话出自某套被承诺的权重——而在这之前，这件事被认为要花上几天和 90 GB。</p></blockquote>
+<p>但它同时暴露了这条路的<strong>边界</strong>：</p>
+<ul><li>能证明"<strong>哪个模型</strong>跑的"，<strong>证不了"模型对不对、安不安全"</strong>；</li><li>能<strong>发现</strong>篡改，<strong>阻止</strong>不了；</li><li>当下证的是"<strong>一个和线上模型很接近但不一样的东西</strong>"。</li></ul>
+<h3>如果只记三句话</h3>
+<ol><li><strong>哈希 + 折叠式 IOP + 批处理</strong>，把证明成本从"几小时"压到"每秒百 token"；</li><li><strong>DAG 化 Fiat–Shamir + 链接证明</strong>，解决了"GPU 并行"和"一个承诺复用于千万请求"这两个真实部署障碍；</li><li><strong>Lean 钉死了可靠性，但代码等价性、批量 ZK、浮点一致性都还是开的</strong>——所以它是<strong>里程碑，不是终点</strong>。</li></ol>
+<h3>一个容易被忽略的伏笔</h3>
+<p>原文脚注提到：2026-10-19 的 RSP 更新里，Anthropic 把目标名称从"<strong>可证明推理</strong>"改成了"<strong>推理验证</strong>"（inference verification），因为最初的目标只是"对自身 token 流获得高度保证"，而密码学证明只是<strong>多种实现方式之一</strong>（他们另有一个"签名 + 可信服务器重算"的项目已达到该目标）。</p>
+<blockquote><p>读这篇时要分清：<strong>FlashProve 是"另一条路的技术演示"，不是 Anthropic 生产合规方案的唯一答案。</strong></p></blockquote>
+<hr>
+<h2>十八、术语速查</h2>
+<div class="table-wrap"><table><thead><tr><th>术语</th><th>一句话解释</th></tr></thead><tbody><tr><td><strong>zkSNARK</strong></td><td>零知识简洁知识论证：证明者用一条短信让验证者确信某计算做对了，且不泄露别的</td></tr><tr><td><strong>IOP</strong></td><td>交互式预言机证明：验证者只能"点查询"证明者的长串，是整栋楼的地基</td></tr><tr><td><strong>ROM</strong></td><td>随机预言机模型：把哈希函数当成真随机函数的理想化假设</td></tr><tr><td><strong>BCS 变换</strong></td><td>IOP + Merkle 承诺 → 交互式证明系统（Kil92 / Mic00 / BCS16）</td></tr><tr><td><strong>Fiat–Shamir</strong></td><td>用哈希把交互"折叠"成单条消息，得到非交互证明</td></tr><tr><td><strong>Merkle 承诺</strong></td><td>哈希树：给长向量一个短承诺，可按位置打开</td></tr><tr><td><strong>Sumcheck</strong></td><td>把"很多点求和"归约为"一个随机点的值"，系统的主要节拍器</td></tr><tr><td><strong>折叠 / 码切换</strong></td><td>逐步缩小声明规模、在码之间跳转，是简洁性的来源</td></tr><tr><td><strong>列表译码区间</strong></td><td>邻近性参数开到极限的分析区间，效率最高但最难证</td></tr><tr><td><strong>完备性 / 可靠性 / 零知识</strong></td><td>真陈述必被接受 / 假陈述难以取信 / 不泄露额外信息</td></tr><tr><td><strong>MoE</strong></td><td>混合专家：每 token 只激活少数专家，4000 亿里用 170 亿</td></tr><tr><td><strong>指示向量</strong></td><td>用 0/1 向量表示"选了哪个专家"，让查询不泄露选择</td></tr><tr><td><strong>查找论证</strong></td><td>用公开小表处理非线性函数，避开昂贵的域上算术</td></tr><tr><td><strong>Lean</strong></td><td>证明助手，把定理写成代码并由机器检查</td></tr><tr><td><strong>DAG Fiat–Shamir</strong></td><td>本文把哈希链分叉成有向无环图，换取 GPU 并行</td></tr><tr><td><strong>链接证明</strong></td><td>用同一权重发出多份编码并互证，绕开单份编码的查询预算</td></tr></tbody></table></div>
+<hr>
+<h2>十九、参考资料</h2>
+<ol><li>Anthropic Research Blog. FlashProve: An open-source library for provable inference.</li></ol>
+<p>https://www.anthropic.com/research/provable-inference</p>
+<ol><li>FlashProve 技术报告（PDF）.</li></ol>
+<p>https://www.anthropic.com/document/flashprove-technical-report</p>
+<ol><li>代码仓库（Apache 2.0）.</li></ol>
+<p>https://github.com/anthropics/FlashProve</p>
+<ol><li>论文与 Lean 形式化.</li></ol>
+<p>https://github.com/anthropics/FlashProve/blob/main/paper/paper.pdf https://github.com/anthropics/FlashProve/tree/main/lean https://github.com/anthropics/FlashProve/blob/main/lean/STATEMENTS.html</p>
+<ol><li>模型页面（Llama 4 Maverick）.</li></ol>
+<p>https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct</p>
+<ol><li>相关背景：Anthropic Responsible Scaling Policy / 路线图.</li></ol>
+<p>https://www.anthropic.com/responsible-scaling-policy/roadmap</p>
+<hr>
+<h2>二十、我的追问（待补充）</h2>
+<ul><li><strong>argmax 到底怎么证？</strong> 20 万词表上的最大值论证用比较网络、排序置换还是查找？成本占多少？</li><li><strong>浮点/整数不一致的可利用性</strong>：对抗性提示能把偏离放大到什么程度？[RKHRW25] 的具体攻击面是什么？</li><li><strong>误差界 ε₁/ε₂/ε₃ 的真实数值</strong>是多少？README / Lean 里能读到吗？</li><li><strong>"批量 ZK 未证"的风险</strong>：批内信息泄露的具体通道是什么？共享邻近性测试会不会泄露"批里有几个请求"以外的信息？</li><li><strong>上下文扩展路径</strong>：1024 → 32k 时，证明成本是线性还是超线性？折叠轮次会怎么变？</li><li><strong>多卡张量并行的证明者</strong>：DAG 化 Fiat–Shamir 是否天然支持跨 GPU 拆分？</li><li><strong>对比 Attestable</strong>：53–77 tok/s（31B 稠密）vs 110 tok/s（400B MoE）——不同模型规模下谁更优？换算到同等 FLOPs 怎么比？</li><li><strong>实际审计场景</strong>：监管者若只抽查 1% 请求，作弊者的最优策略和检测概率是多少？</li><li><strong>和生产方案的关系</strong>："签名 + 可信服务器重算"与本文密码学证明，在什么条件下前者更划算？</li></ul>
+<hr>
+<p><em>笔记整理自公开博客与技术报告，仅供学习参考。技术细节（误差界、参数设置）请以官方代码与 Lean 源码为准。</em></p>
+      </div>
+      <a class="back" href="index.html">← 全部笔记</a>
+    </article>
+    <footer class="foot">
+      <p>© <span id="year">2026</span> 祝蕊</p>
+      <p>最后更新 2026.11.08</p>
+    </footer>
+  </main>
+</div>
+<script src="../assets/js/main.js?v=90a6ca45"></script>
+<script src="../assets/js/leaves.js?v=90a6ca45"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

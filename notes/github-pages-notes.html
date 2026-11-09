@@ -12,7 +12,7 @@
 <meta property="og:description" content="把一堆文件 push 上去，几分钟后就有了网址——中间发生了什么，以及怎么少踩坑。">
 <link rel="canonical" href="https://imzhurui.github.io/notes/github-pages-notes.html">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/css/style.css?v=f604e348">
+<link rel="stylesheet" href="../assets/css/style.css?v=90a6ca45">
 <script>
   (function () {
     try {
@@ -61,19 +61,19 @@
       </header>
       <div class="prose">
 <p>把文件推上去，等一会儿，网址就能访问了。看起来像魔法，其实只有三步：GitHub 收到文件 → 构建（可选）→ 把文件摆到 CDN 上。</p>
-<h3>一、仓库名决定网址</h3>
+<h2>一、仓库名决定网址</h2>
 <ul><li><strong>用户站点</strong>：仓库叫 <code>用户名.github.io</code>，网址就是 <code>https://用户名.github.io</code></li><li><strong>项目站点</strong>：仓库叫别的名字，网址是 <code>https://用户名.github.io/仓库名</code>，一个账号可以有无数个</li></ul>
 <p>注意必须是<strong>公开仓库</strong>：免费账号的 Pages 只支持 public 仓库。站点本身也一定是公开可访问的，所以别放密钥、别放私人照片。</p>
-<h3>二、发布源：分支还是 Actions</h3>
+<h2>二、发布源：分支还是 Actions</h2>
 <p>在仓库的 <strong>Settings → Pages</strong> 里选发布源：</p>
 <ol><li><strong>Deploy from a branch</strong>：最简单，选分支和目录，每次推送自动发布</li><li><strong>GitHub Actions</strong>：适合需要构建的项目（Hugo、Astro、Next.js 静态导出……）</li></ol>
 <p>选分支方式时，GitHub 默认会拿 Jekyll 过一遍你的文件。纯手写的 HTML 站点建议在根目录放一个空的 <code>.nojekyll</code> 文件，跳过这层处理。</p>
-<h3>三、几个一定会踩的坑</h3>
+<h2>三、几个一定会踩的坑</h2>
 <ul><li><strong>大小写</strong>：Pages 跑在 Linux 上，文件名区分大小写</li><li><strong>入口文件</strong>：根目录必须有 <code>index.html</code>，否则打开是 404</li><li><strong>路径</strong>：项目站点在子路径下，用相对路径最稳</li><li><strong>延迟</strong>：推送后最长要等约 10 分钟</li><li><strong>不能跑后端</strong>：PHP、Python、数据库都不行</li></ul>
-<h3>四、本地预览</h3>
+<h2>四、本地预览</h2>
 <pre><code>python -m http.server 8000
 # 然后打开 http://localhost:8000</code></pre>
-<h3>五、免费的边界</h3>
+<h2>五、免费的边界</h2>
 <p>软限制大约是：仓库 1 GB，站点 1 GB，每月 100 GB 流量，每小时 10 次构建。个人主页和博客基本碰不到，别拿它当图床或者放视频就行。</p>
       </div>
       <a class="back" href="index.html">← 全部笔记</a>
@@ -84,8 +84,8 @@
     </footer>
   </main>
 </div>
-<script src="../assets/js/main.js?v=f604e348"></script>
-<script src="../assets/js/leaves.js?v=f604e348"></script>
+<script src="../assets/js/main.js?v=90a6ca45"></script>
+<script src="../assets/js/leaves.js?v=90a6ca45"></script>
 <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
