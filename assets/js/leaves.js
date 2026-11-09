@@ -47,10 +47,10 @@
       step: 16, min: 30, max: 110
     },
     rain: {
-      colors: ['#9fb6d4', '#b6c9e0', '#8aa2c2'],
-      size: [9, 20], vy: [3.4, 7], sway: [0, 0], alpha: [0.22, 0.5],
+      colors: ['#a9c0dc', '#c2d4e8', '#93aac6'],
+      size: [14, 38], vy: [6, 11], sway: [0, 0], alpha: [0.26, 0.62],
       spinV: [0, 0], rotV: [0, 0],
-      step: 22, min: 34, max: 96
+      step: 16, min: 46, max: 128
     },
     none: {
       colors: ['#ffffff'],
@@ -75,8 +75,8 @@
       ? ['#d9a23c', '#e6b451', '#c98f2e']
       : ['#ffe9a8', '#e9ffb4', '#fff4c8'];
     CFG.rain.colors = light
-      ? ['#8aa2c2', '#9fb6d4']
-      : ['#9fb6d4', '#b6c9e0'];
+      ? ['#7b93b4', '#8ca5c4', '#6d85a6']
+      : ['#a9c0dc', '#c2d4e8'];
   }
 
   /* 天气覆盖：拿不到天气就用季节默认 */
@@ -175,11 +175,25 @@
   }
 
   function drawRain(p) {
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(-p.size * 0.16, p.size);
+    var len = p.size;
+    var dx = -len * 0.2;
     ctx.strokeStyle = p.color;
+    ctx.lineCap = 'round';
+
+    // 上半段：淡，像雨丝的头
+    ctx.globalAlpha = p.alpha * 0.32;
     ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, -len * 0.2);
+    ctx.lineTo(dx * 0.55, len * 0.42);
+    ctx.stroke();
+
+    // 下半段：实，像落速带出来的痕
+    ctx.globalAlpha = p.alpha;
+    ctx.lineWidth = 1.15;
+    ctx.beginPath();
+    ctx.moveTo(dx * 0.5, len * 0.4);
+    ctx.lineTo(dx, len);
     ctx.stroke();
   }
 
