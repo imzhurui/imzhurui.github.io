@@ -21,18 +21,6 @@
   color-scheme: light;
 }
 
-[data-theme="dark"] {
-  --paper: #0f1013;
-  --paper-2: #14161a;
-  --ink: #e8e9ec;
-  --muted: #9a9ea8;
-  --rule: #23262c;
-  --accent: #a99ad6;
-  --accent-soft: rgba(169, 154, 214, 0.10);
-  --wash: rgba(169, 154, 214, 0.06);
-  color-scheme: dark;
-}
-
 /* ---------------- 四季：底色、墨色、强调色都换 ----------------
    夏夜与冬夜整页转深：萤火和雪才看得见 */
 
@@ -46,6 +34,7 @@
 }
 
 [data-season="summer"] {
+  color-scheme: dark;
   --paper: #0b211d;
   --paper-2: #071713;
   --ink: #e2f2ea;
@@ -66,6 +55,7 @@
 }
 
 [data-season="winter"] {
+  color-scheme: dark;
   --paper: #16202e;
   --paper-2: #0c1420;
   --ink: #eaf1fb;
@@ -74,50 +64,6 @@
   --accent: #a9cde8;
   --accent-soft: rgba(169, 205, 232, 0.12);
   --wash: rgba(170, 205, 255, 0.16);
-}
-
-[data-theme="dark"][data-season="spring"] {
-  --paper: #151220;
-  --paper-2: #1b1526;
-  --ink: #ece7f2;
-  --muted: #a89cb0;
-  --rule: #2a2233;
-  --accent: #d78fae;
-  --accent-soft: rgba(215, 143, 174, 0.12);
-  --wash: rgba(215, 143, 174, 0.08);
-}
-
-[data-theme="dark"][data-season="summer"] {
-  --paper: #0a1218;
-  --paper-2: #0d1a21;
-  --ink: #e2eef3;
-  --muted: #8fa6b0;
-  --rule: #1b2a33;
-  --accent: #7fc9df;
-  --accent-soft: rgba(127, 201, 223, 0.12);
-  --wash: rgba(90, 170, 190, 0.10);
-}
-
-[data-theme="dark"][data-season="autumn"] {
-  --paper: #121020;
-  --paper-2: #171428;
-  --ink: #e8e6f2;
-  --muted: #9d99b3;
-  --rule: #232038;
-  --accent: #a99ad6;
-  --accent-soft: rgba(169, 154, 214, 0.12);
-  --wash: rgba(140, 120, 210, 0.10);
-}
-
-[data-theme="dark"][data-season="winter"] {
-  --paper: #0a0f16;
-  --paper-2: #0d141d;
-  --ink: #e6eef8;
-  --muted: #93a6ba;
-  --rule: #1d2836;
-  --accent: #a9cde8;
-  --accent-soft: rgba(169, 205, 232, 0.12);
-  --wash: rgba(150, 195, 255, 0.12);
 }
 
 *,
@@ -158,11 +104,6 @@ body::before {
   opacity: 0.05;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-}
-
-[data-theme="dark"] body::before {
-  opacity: 0.035;
-  mix-blend-mode: screen;
 }
 
 #leaves {
@@ -358,7 +299,6 @@ a {
 }
 .side-foot a:hover { color: var(--accent); }
 
-.theme-toggle,
 .season-toggle {
   padding: 0;
   border: 0;
@@ -370,9 +310,7 @@ a {
   cursor: pointer;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
-.theme-toggle:hover,
 .season-toggle:hover { color: var(--accent); }
-.theme-toggle:active,
 .season-toggle:active { opacity: 0.55; }
 
 /* ---------------- 正文 ---------------- */

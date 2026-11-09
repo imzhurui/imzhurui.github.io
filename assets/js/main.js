@@ -4,41 +4,6 @@
 
   var root = document.documentElement;
 
-  /* ---------------- 深浅色 ---------------- */
-
-  var toggle = document.querySelector('.theme-toggle');
-
-  function applyTheme(theme) {
-    root.dataset.theme = theme;
-    if (toggle) {
-      toggle.setAttribute(
-        'aria-label',
-        theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'
-      );
-    }
-  }
-
-  if (toggle) {
-    toggle.addEventListener('click', function () {
-      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
-      try {
-        localStorage.setItem('theme', next);
-      } catch (e) {}
-    });
-  }
-
-  try {
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
-    var onThemeChange = function (e) {
-      if (!localStorage.getItem('theme')) {
-        applyTheme(e.matches ? 'dark' : 'light');
-      }
-    };
-    if (mq.addEventListener) mq.addEventListener('change', onThemeChange);
-    else if (mq.addListener) mq.addListener(onThemeChange);
-  } catch (e) {}
-
   /* ---------------- 季节 ---------------- */
 
   var SEASONS = ['spring', 'summer', 'autumn', 'winter'];
