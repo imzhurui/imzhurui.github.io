@@ -1,13 +1,20 @@
-/* 青岛的实时天气：拿到就叠加到页面上，拿不到就交给季节默认。
-   数据来自 Open-Meteo（免费、无需 key），缓存 30 分钟。 */
+/* 天气：默认取青岛实时天气（Open-Meteo），点按钮可以手动锁定。 */
 (function () {
   'use strict';
 
   var root = document.documentElement;
-  var note = document.querySelector('.weather-note');
+  var btn = document.querySelector('.weather-toggle');
+  var KEYS = ['auto', 'sunny', 'cloudy', 'overcast', 'rain', 'snow'];
+  var LABEL = { sunny: '晴', cloudy: '多云', overcast: '阴', rain: '雨', snow: '雪' };
   var CACHE_KEY = 'qingdao-weather-v1';
   var TTL = 30 * 60 * 1000;
-  var LABEL = { sunny: '晴', cloudy: '多云', overcast: '阴', rain: '雨', snow: '雪' };
+  var pref = 'auto';
+  var temp = null;
+
+  try {
+    var saved = localStorage.getItem('weather');
+    if (KEYS.indexOf(saved) >= 0) pref = saved;
+  } catch (e) {}
 
   function mapCode(code) {
     if (code === 0) return 'sunny';
@@ -21,14 +28,17 @@
     return 'cloudy';
   }
 
-  function apply(kind, temp) {
-    root.dataset.weather = kind;
-    if (note) {
-      var text = '青岛 · ' + (LABEL[kind] || '');
-      if (typeof temp === 'number') text += ' ' + Math.round(temp) + '°';
-      note.textContent = text;
-      note.hidden = false;
-    }
+  function label(kind) {
+    if (!btn) return;
+    var text = '天气 · ' + (LABEL[kind] || '—');
+    if (pref === 'auto' && typeof temp === 'number') text += ' ' + Math.round(temp) + '°';
+    if (pref !== 'auto') text += '（手动）';
+    btn.textContent = text;
+  }
+
+  function apply(kind) {
+    root.dataset.weather = kind || '';
+    label(kind);
     document.dispatchEvent(new CustomEvent('weatherchange', { detail: { weather: kind } }));
   }
 
@@ -44,29 +54,54 @@
     }
   }
 
-  var hit = fromCache();
-  if (hit) {
-    apply(hit.kind, hit.temp);
-    return;
+  function fetchWeather() {
+    if (!window.fetch) return;
+    var url = 'https://api.open-meteo.com/v1/forecast' +
+      '?latitude=36.0671&longitude=120.3826' +
+      '&current=temperature_2m,weather_code&timezone=Asia%2FShanghai';
+
+    fetch(url, { mode: 'cors' }).then(function (r) {
+      return r.json();
+    }).then(function (data) {
+      if (pref !== 'auto') return;
+      var cur = (data && data.current) || {};
+      temp = typeof cur.temperature_2m === 'number' ? cur.temperature_2m : null;
+      apply(mapCode(Number(cur.weather_code)));
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          t: Date.now(), kind: root.dataset.weather, temp: temp
+        }));
+      } catch (e) {}
+    }).catch(function () {
+      if (pref === 'auto') root.dataset.weather = '';
+    });
   }
 
-  if (!window.fetch) return;
+  function refresh() {
+    if (pref !== 'auto') {
+      apply(pref);
+      return;
+    }
+    var hit = fromCache();
+    if (hit) {
+      temp = typeof hit.temp === 'number' ? hit.temp : null;
+      apply(hit.kind);
+      return;
+    }
+    fetchWeather();
+  }
 
-  var url = 'https://api.open-meteo.com/v1/forecast' +
-    '?latitude=36.0671&longitude=120.3826' +
-    '&current=temperature_2m,weather_code&timezone=Asia%2FShanghai';
+  if (btn) {
+    btn.addEventListener('click', function () {
+      var i = KEYS.indexOf(pref);
+      pref = KEYS[(i + 1) % KEYS.length];
+      try {
+        localStorage.setItem('weather', pref);
+      } catch (e) {}
+      temp = null;
+      refresh();
+    });
+  }
 
-  fetch(url, { mode: 'cors' }).then(function (r) {
-    return r.json();
-  }).then(function (data) {
-    var cur = (data && data.current) || {};
-    var kind = mapCode(Number(cur.weather_code));
-    var temp = typeof cur.temperature_2m === 'number' ? cur.temperature_2m : null;
-    apply(kind, temp);
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), kind: kind, temp: temp }));
-    } catch (e) {}
-  }).catch(function () {
-    root.dataset.weather = '';
-  });
+  refresh();
 })();

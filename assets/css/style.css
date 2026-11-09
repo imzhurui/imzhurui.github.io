@@ -364,7 +364,9 @@ a {
 }
 .side-foot a:hover { color: var(--accent); }
 
-.season-toggle {
+.season-toggle,
+.phase-toggle,
+.weather-toggle {
   padding: 0;
   border: 0;
   background: none;
@@ -375,8 +377,12 @@ a {
   cursor: pointer;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
-.season-toggle:hover { color: var(--accent); }
-.season-toggle:active { opacity: 0.55; }
+.season-toggle:hover,
+.phase-toggle:hover,
+.weather-toggle:hover { color: var(--accent); }
+.season-toggle:active,
+.phase-toggle:active,
+.weather-toggle:active { opacity: 0.55; }
 
 /* ---------------- 正文 ---------------- */
 
