@@ -143,7 +143,7 @@
   function drawFirefly(p, t) {
     if (!glow) glow = makeGlow();
     var pulse = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * p.pulse + p.phase));
-    var size = p.size * 7 * (0.85 + 0.3 * pulse);
+    var size = p.size * 9 * (0.85 + 0.3 * pulse);
     ctx.globalAlpha = p.alpha * pulse;
     ctx.drawImage(glow, -size / 2, -size / 2, size, size);
     ctx.globalAlpha = p.alpha * pulse * 0.9;
