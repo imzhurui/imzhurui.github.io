@@ -72,6 +72,11 @@
     });
   }
 
+  document.addEventListener('resetlayers', function () {
+    pref = 'auto';
+    apply();
+  });
+
   apply();
   setInterval(apply, 10 * 60 * 1000);
 })();

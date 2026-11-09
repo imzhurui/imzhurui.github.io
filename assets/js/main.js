@@ -67,6 +67,22 @@
     });
   }
 
+  var autoBtn = document.querySelector('.auto-toggle');
+  if (autoBtn) {
+    autoBtn.addEventListener('click', function () {
+      try {
+        localStorage.setItem('season', 'auto');
+        localStorage.setItem('phase', 'auto');
+        localStorage.setItem('weather', 'auto');
+      } catch (e) {}
+      applySeason('auto');
+      document.dispatchEvent(
+        new CustomEvent('seasonchange', { detail: { season: root.dataset.season } })
+      );
+      document.dispatchEvent(new CustomEvent('resetlayers'));
+    });
+  }
+
   /* ---------------- 年份 ---------------- */
 
   var year = document.getElementById('year');

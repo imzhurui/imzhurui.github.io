@@ -366,7 +366,8 @@ a {
 
 .season-toggle,
 .phase-toggle,
-.weather-toggle {
+.weather-toggle,
+.auto-toggle {
   padding: 0;
   border: 0;
   background: none;
@@ -379,10 +380,14 @@ a {
 }
 .season-toggle:hover,
 .phase-toggle:hover,
-.weather-toggle:hover { color: var(--accent); }
+.weather-toggle:hover,
+.auto-toggle:hover { color: var(--accent); }
 .season-toggle:active,
 .phase-toggle:active,
-.weather-toggle:active { opacity: 0.55; }
+.weather-toggle:active,
+.auto-toggle:active { opacity: 0.55; }
+
+.auto-toggle { color: var(--accent); opacity: 0.85; }
 
 /* ---------------- 正文 ---------------- */
 

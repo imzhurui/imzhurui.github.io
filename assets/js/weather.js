@@ -103,5 +103,11 @@
     });
   }
 
+  document.addEventListener('resetlayers', function () {
+    pref = 'auto';
+    temp = null;
+    refresh();
+  });
+
   refresh();
 })();
