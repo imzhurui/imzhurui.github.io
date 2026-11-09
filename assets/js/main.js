@@ -51,6 +51,27 @@
   var selPhase = document.querySelector('.c-phase');
   var selWeather = document.querySelector('.c-weather');
 
+  var LAYER_LABEL = {
+    season: { spring: '春', summer: '夏', autumn: '秋', winter: '冬' },
+    phase: { day: '白天', dusk: '黄昏', night: '夜间', late: '深夜' },
+    weather: { sunny: '晴', cloudy: '多云', overcast: '阴', rain: '雨', snow: '雪' }
+  };
+
+  function updateLayersBtn() {
+    if (!layersBtn) return;
+    var s = LAYER_LABEL.season[root.dataset.season] || '—';
+    var w = LAYER_LABEL.weather[root.dataset.weather] || '—';
+    var p = LAYER_LABEL.phase[root.dataset.phase] || '—';
+    layersBtn.textContent = s + ' · ' + w + ' · ' + p;
+    layersBtn.setAttribute('title', '当前：' + s + ' / ' + w + ' / ' + p + '，点开可改');
+    layersBtn.setAttribute('aria-label', '当前氛围 ' + s + ' ' + w + ' ' + p + '，点开可改');
+  }
+
+  document.addEventListener('seasonchange', updateLayersBtn);
+  document.addEventListener('phasechange', updateLayersBtn);
+  document.addEventListener('weatherchange', updateLayersBtn);
+  updateLayersBtn();
+
   function remember(key, value) {
     try {
       localStorage.setItem(key, value);
