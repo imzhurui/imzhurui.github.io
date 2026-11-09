@@ -11,7 +11,7 @@
 <meta property="og:description" content="一个模型不够用，要几个专业 Agent 分工；作者进一步论证：隐私计算是下一代个人智能体的基础设施，但 TEE 与密码学不能互相替代。">
 <link rel="canonical" href="https://imzhurui.github.io/notes/google-pha-agent.html">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%236a5a9e'/%3E%3Ctext x='16' y='23' font-size='18' font-family='serif' fill='%23ffffff' text-anchor='middle'%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/css/style.css?v=c2c80a0f">
+<link rel="stylesheet" href="../assets/css/style.css?v=b0b24911">
 <script>
   (function () {
     try {
@@ -51,35 +51,26 @@
       <a href="https://github.com/imzhurui" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <button class="layers-toggle" type="button">氛围</button>
       <div class="layers-panel" hidden>
-        <label>季节
-          <select class="c-season">
-            <option value="spring">春</option>
-            <option value="summer">夏</option>
-            <option value="autumn">秋</option>
-            <option value="winter">冬</option>
-          </select>
-        </label>
-        <label>昼夜
-          <select class="c-phase">
-            <option value="day">白天</option>
-            <option value="dusk">黄昏</option>
-            <option value="night">夜间</option>
-            <option value="late">深夜</option>
-          </select>
-        </label>
-        <label>天气
-          <select class="c-weather">
-            <option value="sunny">晴</option>
-            <option value="cloudy">多云</option>
-            <option value="overcast">阴</option>
-            <option value="rain">雨</option>
-            <option value="snow">雪</option>
-          </select>
-        </label>
-        <div class="layers-actions">
-          <button class="c-apply" type="button">应用</button>
-          <button class="c-auto" type="button">自动</button>
-        </div>
+        <p class="layer-row"><span class="layer-key">季节</span>
+          <button class="opt" type="button" data-layer="season" data-value="spring">春</button>
+          <button class="opt" type="button" data-layer="season" data-value="summer">夏</button>
+          <button class="opt" type="button" data-layer="season" data-value="autumn">秋</button>
+          <button class="opt" type="button" data-layer="season" data-value="winter">冬</button>
+        </p>
+        <p class="layer-row"><span class="layer-key">昼夜</span>
+          <button class="opt" type="button" data-layer="phase" data-value="day">白天</button>
+          <button class="opt" type="button" data-layer="phase" data-value="dusk">黄昏</button>
+          <button class="opt" type="button" data-layer="phase" data-value="night">夜间</button>
+          <button class="opt" type="button" data-layer="phase" data-value="late">深夜</button>
+        </p>
+        <p class="layer-row"><span class="layer-key">天气</span>
+          <button class="opt" type="button" data-layer="weather" data-value="sunny">晴</button>
+          <button class="opt" type="button" data-layer="weather" data-value="cloudy">多云</button>
+          <button class="opt" type="button" data-layer="weather" data-value="overcast">阴</button>
+          <button class="opt" type="button" data-layer="weather" data-value="rain">雨</button>
+          <button class="opt" type="button" data-layer="weather" data-value="snow">雪</button>
+        </p>
+        <button class="layer-auto" type="button">回到自动</button>
       </div>
     </div>
   </aside>
@@ -173,10 +164,10 @@
     </footer>
   </main>
 </div>
-<script src="../assets/js/main.js?v=c2c80a0f"></script>
-<script src="../assets/js/weather.js?v=c2c80a0f"></script>
-<script src="../assets/js/daynight.js?v=c2c80a0f"></script>
-<script src="../assets/js/leaves.js?v=c2c80a0f"></script>
+<script src="../assets/js/main.js?v=b0b24911"></script>
+<script src="../assets/js/weather.js?v=b0b24911"></script>
+<script src="../assets/js/daynight.js?v=b0b24911"></script>
+<script src="../assets/js/leaves.js?v=b0b24911"></script>
 <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

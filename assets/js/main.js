@@ -47,9 +47,8 @@
 
   var layersBtn = document.querySelector('.layers-toggle');
   var panel = document.querySelector('.layers-panel');
-  var selSeason = document.querySelector('.c-season');
-  var selPhase = document.querySelector('.c-phase');
-  var selWeather = document.querySelector('.c-weather');
+  var opts = document.querySelectorAll('.opt');
+  var autoBtn = document.querySelector('.layer-auto');
 
   var LAYER_LABEL = {
     season: { spring: '春', summer: '夏', autumn: '秋', winter: '冬' },
@@ -57,20 +56,27 @@
     weather: { sunny: '晴', cloudy: '多云', overcast: '阴', rain: '雨', snow: '雪' }
   };
 
-  function updateLayersBtn() {
-    if (!layersBtn) return;
-    var s = LAYER_LABEL.season[root.dataset.season] || '—';
-    var w = LAYER_LABEL.weather[root.dataset.weather] || '—';
-    var p = LAYER_LABEL.phase[root.dataset.phase] || '—';
-    layersBtn.textContent = s + ' · ' + w + ' · ' + p;
-    layersBtn.setAttribute('title', '当前：' + s + ' / ' + w + ' / ' + p + '，点开可改');
-    layersBtn.setAttribute('aria-label', '当前氛围 ' + s + ' ' + w + ' ' + p + '，点开可改');
+  function currentOf(layer) {
+    if (layer === 'season') return root.dataset.season;
+    if (layer === 'phase') return root.dataset.phase;
+    return root.dataset.weather;
   }
 
-  document.addEventListener('seasonchange', updateLayersBtn);
-  document.addEventListener('phasechange', updateLayersBtn);
-  document.addEventListener('weatherchange', updateLayersBtn);
-  updateLayersBtn();
+  function updateLayersBtn() {
+    if (layersBtn) {
+      var s = LAYER_LABEL.season[root.dataset.season] || '—';
+      var w = LAYER_LABEL.weather[root.dataset.weather] || '—';
+      var p = LAYER_LABEL.phase[root.dataset.phase] || '—';
+      layersBtn.textContent = s + ' · ' + w + ' · ' + p;
+      layersBtn.setAttribute('title', '当前：' + s + ' / ' + w + ' / ' + p + '，点开可改');
+    }
+
+    for (var i = 0; i < opts.length; i++) {
+      var opt = opts[i];
+      var on = currentOf(opt.dataset.layer) === opt.dataset.value;
+      opt.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
 
   function remember(key, value) {
     try {
@@ -78,43 +84,34 @@
     } catch (e) {}
   }
 
-  function openPanel() {
-    if (!panel) return;
-    if (selSeason) selSeason.value = root.dataset.season || 'autumn';
-    if (selPhase) selPhase.value = root.dataset.phase || 'day';
-    if (selWeather) selWeather.value = root.dataset.weather || 'sunny';
-    panel.hidden = false;
-  }
-
-  function closePanel() {
-    if (panel) panel.hidden = true;
-  }
-
   if (layersBtn && panel) {
     layersBtn.addEventListener('click', function () {
-      if (panel.hidden) openPanel();
-      else closePanel();
+      panel.hidden = !panel.hidden;
+      if (!panel.hidden) updateLayersBtn();
     });
 
-    var applyBtn = panel.querySelector('.c-apply');
-    var autoBtn = panel.querySelector('.c-auto');
+    for (var k = 0; k < opts.length; k++) {
+      opts[k].addEventListener('click', function () {
+        var layer = this.dataset.layer;
+        var value = this.dataset.value;
 
-    if (applyBtn) {
-      applyBtn.addEventListener('click', function () {
-        var combo = {
-          season: selSeason ? selSeason.value : 'autumn',
-          phase: selPhase ? selPhase.value : 'day',
-          weather: selWeather ? selWeather.value : 'sunny'
-        };
-        remember('season', combo.season);
-        remember('phase', combo.phase);
-        remember('weather', combo.weather);
-        applySeason(combo.season);
-        document.dispatchEvent(
-          new CustomEvent('seasonchange', { detail: { season: root.dataset.season } })
-        );
-        document.dispatchEvent(new CustomEvent('applylayers', { detail: combo }));
-        closePanel();
+        if (layer === 'season') {
+          remember('season', value);
+          applySeason(value);
+          document.dispatchEvent(
+            new CustomEvent('seasonchange', { detail: { season: root.dataset.season } })
+          );
+        } else if (layer === 'phase') {
+          remember('phase', value);
+          root.dataset.phase = value;
+          document.dispatchEvent(new CustomEvent('applylayers', { detail: { phase: value } }));
+        } else {
+          remember('weather', value);
+          root.dataset.weather = value;
+          document.dispatchEvent(new CustomEvent('applylayers', { detail: { weather: value } }));
+        }
+
+        updateLayersBtn();
       });
     }
 
@@ -128,12 +125,18 @@
           new CustomEvent('seasonchange', { detail: { season: root.dataset.season } })
         );
         document.dispatchEvent(new CustomEvent('resetlayers'));
-        closePanel();
+        panel.hidden = true;
+        updateLayersBtn();
       });
     }
   }
 
-  /* ---------------- 年份 ---------------- */  /* ---------------- 年份 ---------------- */
+  document.addEventListener('seasonchange', updateLayersBtn);
+  document.addEventListener('phasechange', updateLayersBtn);
+  document.addEventListener('weatherchange', updateLayersBtn);
+  updateLayersBtn();
+
+  /* ---------------- 年份 ---------------- */  /* ---------------- 年份 ---------------- */  /* ---------------- 年份 ---------------- */
 
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
