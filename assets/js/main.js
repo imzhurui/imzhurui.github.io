@@ -6,8 +6,8 @@
 
   /* ---------------- 季节 ---------------- */
 
-  var SEASONS = ['spring', 'summer', 'autumn', 'winter'];
-  var SEASON_LABEL = { spring: '春', summer: '夏', autumn: '秋', winter: '冬' };
+  var SEASONS = ['spring', 'summer', 'autumn', 'winter', 'moss'];
+  var SEASON_LABEL = { spring: '春', summer: '夏', autumn: '秋', winter: '冬', moss: '墨绿' };
 
   function autoSeason() {
     var m = new Date().getMonth() + 1;
@@ -29,7 +29,7 @@
     var real = next === 'auto' ? autoSeason() : next;
     root.dataset.season = real;
     if (seasonBtn) {
-      seasonBtn.textContent = '季节 · ' + SEASON_LABEL[real] + (next === 'auto' ? '（自动）' : '');
+      seasonBtn.textContent = '氛围 · ' + SEASON_LABEL[real] + (next === 'auto' ? '（自动）' : '');
       seasonBtn.setAttribute('aria-label', '切换季节，现在是' + SEASON_LABEL[real]);
     }
 
@@ -55,6 +55,7 @@
       else if (pref === 'spring') next = 'summer';
       else if (pref === 'summer') next = 'autumn';
       else if (pref === 'autumn') next = 'winter';
+      else if (pref === 'winter') next = 'moss';
       else next = 'auto';
       applySeason(next);
       try {

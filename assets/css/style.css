@@ -56,6 +56,19 @@
   --wash: rgba(232, 168, 116, 0.22);
 }
 
+/* 常驻墨绿：不跟四季走，手工选的氛围 */
+[data-season="moss"] {
+  color-scheme: dark;
+  --paper: #0b1f1b;
+  --paper-2: #071412;
+  --ink: #e3f0ea;
+  --muted: #8fb3a7;
+  --rule: #1b332c;
+  --accent: #7fd8c4;
+  --accent-soft: rgba(127, 216, 196, 0.12);
+  --wash: rgba(110, 210, 180, 0.12);
+}
+
 [data-season="winter"] {
   color-scheme: dark;
   --paper: #16202e;
