@@ -4,7 +4,7 @@
   'use strict';
 
   var root = document.documentElement;
-  var btn = document.querySelector('.phase-toggle');
+  var btn = null;
   var KEYS = ['auto', 'day', 'dusk', 'night', 'late'];
   var LABEL = { day: '白天', dusk: '黄昏', night: '夜间', late: '深夜' };
   var pref = 'auto';

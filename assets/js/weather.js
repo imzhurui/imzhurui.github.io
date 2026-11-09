@@ -3,7 +3,7 @@
   'use strict';
 
   var root = document.documentElement;
-  var btn = document.querySelector('.weather-toggle');
+  var btn = null;
   var KEYS = ['auto', 'sunny', 'cloudy', 'overcast', 'rain', 'snow'];
   var LABEL = { sunny: '晴', cloudy: '多云', overcast: '阴', rain: '雨', snow: '雪' };
   var CACHE_KEY = 'qingdao-weather-v1';

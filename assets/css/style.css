@@ -365,10 +365,8 @@ a {
 }
 .side-foot a:hover { color: var(--accent); }
 
-.season-toggle,
-.phase-toggle,
-.weather-toggle,
-.auto-toggle {
+.layers-toggle {
+  align-self: flex-start;
   padding: 0;
   border: 0;
   background: none;
@@ -377,20 +375,12 @@ a {
   font-size: 11.5px;
   letter-spacing: 0.03em;
   cursor: pointer;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
-.season-toggle:hover,
-.phase-toggle:hover,
-.weather-toggle:hover,
-.auto-toggle:hover { color: var(--accent); }
-.season-toggle:active,
-.phase-toggle:active,
-.weather-toggle:active,
-.auto-toggle:active { opacity: 0.55; }
+.layers-toggle:hover { color: var(--accent); }
 
-.auto-toggle { color: var(--accent); opacity: 0.85; }
 
-/* 自定义组合面板 */
+/* 氛围面板 */
 .custom-toggle {
   padding: 0;
   border: 0;
@@ -404,7 +394,7 @@ a {
 }
 .custom-toggle:hover { color: var(--accent); }
 
-.custom-panel {
+.layers-panel {
   position: absolute;
   left: 0;
   bottom: 100%;
@@ -423,9 +413,9 @@ a {
   gap: 0.55rem;
 }
 
-.custom-panel[hidden] { display: none; }
+.layers-panel[hidden] { display: none; }
 
-.custom-panel label {
+.layers-panel label {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -434,7 +424,7 @@ a {
   letter-spacing: 0.06em;
 }
 
-.custom-panel select {
+.layers-panel select {
   flex: 1;
   min-width: 0;
   padding: 3px 4px;
@@ -445,13 +435,13 @@ a {
   font: inherit;
 }
 
-.custom-actions {
+.layers-actions {
   display: flex;
   gap: 0.5rem;
   margin-top: 0.2rem;
 }
 
-.custom-actions button {
+.layers-actions button {
   flex: 1;
   padding: 4px 0;
   border: 1px solid var(--rule);
@@ -463,8 +453,8 @@ a {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.custom-actions button:hover { color: var(--accent); border-color: var(--accent); }
-.custom-actions .c-apply { color: var(--accent); border-color: var(--accent); }
+.layers-actions button:hover { color: var(--accent); border-color: var(--accent); }
+.layers-actions .c-apply { color: var(--accent); border-color: var(--accent); }
 
 /* ---------------- 正文 ---------------- */
 
