@@ -45,8 +45,24 @@
       size: [2.2, 5], vy: [0.3, 0.9], sway: [0, 2], alpha: [0.8, 1],
       spinV: [0, 0], rotV: [0, 0],
       step: 16, min: 30, max: 110
+    },
+    rain: {
+      colors: ['#9fb6d4', '#b6c9e0', '#8aa2c2'],
+      size: [9, 20], vy: [3.4, 7], sway: [0, 0], alpha: [0.22, 0.5],
+      spinV: [0, 0], rotV: [0, 0],
+      step: 22, min: 34, max: 96
+    },
+    none: {
+      colors: ['#ffffff'],
+      size: [1, 1], vy: [0, 0], sway: [0, 0], alpha: [0, 0],
+      spinV: [0, 0], rotV: [0, 0],
+      step: 9999, min: 0, max: 0
     }
   };
+
+  /* 天气覆盖：拿不到天气就用季节默认 */
+  var WEATHER_MODE = { overcast: 'none', rain: 'rain', snow: 'snow' };
+  var SEASON_MODE = { spring: 'sakura', summer: 'firefly', autumn: 'leaf', winter: 'snow' };
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 
@@ -90,7 +106,9 @@
 
   function targetCount() {
     var c = cfg();
-    return Math.max(c.min, Math.min(c.max, Math.round(W / c.step)));
+    var n = Math.max(c.min, Math.min(c.max, Math.round(W / c.step)));
+    if (WEATHER === 'cloudy') n = Math.round(n * 0.6);
+    return n;
   }
 
   function respawn(p) {
@@ -137,6 +155,15 @@
     ctx.stroke();
   }
 
+  function drawRain(p) {
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-p.size * 0.16, p.size);
+    ctx.strokeStyle = p.color;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
   function drawSnow(p) {
     ctx.beginPath();
     ctx.arc(0, 0, p.size * 0.55, 0, TAU);
@@ -172,6 +199,11 @@
     }
 
     p.y += p.vy * k;
+    if (MODE === 'rain') {
+      p.x = p.baseX;
+      if (p.y - p.size > H) respawn(p);
+      return;
+    }
     if (MODE !== 'snow') {
       p.spin += p.spinV * k;
       p.rot += p.rotV * k;
@@ -190,9 +222,10 @@
     }
     ctx.globalAlpha = p.alpha;
     ctx.rotate(p.rot);
-    if (MODE !== 'snow') ctx.scale(Math.cos(p.spin), 1);
+    if (MODE !== 'snow' && MODE !== 'rain') ctx.scale(Math.cos(p.spin), 1);
     if (MODE === 'sakura') drawSakura(p);
     else if (MODE === 'snow') drawSnow(p);
+    else if (MODE === 'rain') drawRain(p);
     else drawLeaf(p);
     ctx.restore();
   }
@@ -230,10 +263,24 @@
     while (parts.length < want) parts.push(makeParticle(true));
   }
 
-  var SEASON_MODE = { spring: 'sakura', summer: 'firefly', autumn: 'leaf', winter: 'snow' };
+  var SEASON = 'autumn';
+  var WEATHER = '';
+
+  function resolveMode() {
+    return WEATHER_MODE[WEATHER] || SEASON_MODE[SEASON] || 'leaf';
+  }
 
   function setSeason(name) {
-    MODE = SEASON_MODE[name] || 'leaf';
+    SEASON = name || 'autumn';
+    WEATHER = document.documentElement.dataset.weather || '';
+    MODE = resolveMode();
+    parts.length = 0;
+    resize();
+  }
+
+  function setWeather(kind) {
+    WEATHER = kind || '';
+    MODE = resolveMode();
     parts.length = 0;
     resize();
   }
@@ -256,6 +303,10 @@
 
   document.addEventListener('seasonchange', function (e) {
     setSeason(e.detail && e.detail.season);
+  });
+
+  document.addEventListener('weatherchange', function (e) {
+    setWeather(e.detail && e.detail.weather);
   });
 
   window.addEventListener('resize', function () {

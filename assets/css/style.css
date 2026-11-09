@@ -908,6 +908,33 @@ a {
 
 .prose tbody tr:last-child td { border-bottom: 0; }
 
+/* ---------------- 天气层 ---------------- */
+
+/* 雨和阴天压一层灰，晴与多云几乎不动 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+  background: linear-gradient(180deg,
+    rgba(68, 80, 100, 0.20),
+    rgba(68, 80, 100, 0.06));
+}
+
+[data-weather="rain"] body::after,
+[data-weather="overcast"] body::after { opacity: 1; }
+[data-weather="cloudy"] body::after { opacity: 0.4; }
+
+.weather-note {
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.9;
+}
+
 /* ---------------- 响应式 ---------------- */
 
 @media (max-width: 940px) {
