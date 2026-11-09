@@ -37,23 +37,23 @@
    夏夜与冬夜整页转深：萤火和雪才看得见 */
 
 [data-season="spring"] {
-  --paper: #fef8fa;
-  --paper-2: #f8f0fb;
-  --rule: #ece3ea;
+  --paper: #fef6f8;
+  --paper-2: #f9eef7;
+  --rule: #eee0e9;
   --accent: #a8557a;
-  --accent-soft: rgba(168, 85, 122, 0.07);
-  --wash: rgba(236, 150, 190, 0.16);
+  --accent-soft: rgba(168, 85, 122, 0.08);
+  --wash: rgba(240, 140, 185, 0.22);
 }
 
 [data-season="summer"] {
-  --paper: #0f1c24;
-  --paper-2: #0a141b;
-  --ink: #e4f0f4;
-  --muted: #96aeb8;
-  --rule: #1f2f38;
-  --accent: #86d3e8;
-  --accent-soft: rgba(134, 211, 232, 0.12);
-  --wash: rgba(120, 200, 210, 0.12);
+  --paper: #0b211d;
+  --paper-2: #071713;
+  --ink: #e2f2ea;
+  --muted: #8fb0a6;
+  --rule: #1c322c;
+  --accent: #7fd8c4;
+  --accent-soft: rgba(127, 216, 196, 0.12);
+  --wash: rgba(110, 210, 180, 0.14);
 }
 
 [data-season="autumn"] {
@@ -66,14 +66,14 @@
 }
 
 [data-season="winter"] {
-  --paper: #1c2632;
-  --paper-2: #131b24;
-  --ink: #e9eff7;
-  --muted: #9dafc2;
-  --rule: #2d3947;
-  --accent: #9cc3e0;
-  --accent-soft: rgba(156, 195, 224, 0.12);
-  --wash: rgba(170, 210, 255, 0.14);
+  --paper: #16202e;
+  --paper-2: #0c1420;
+  --ink: #eaf1fb;
+  --muted: #93a8c2;
+  --rule: #26313f;
+  --accent: #a9cde8;
+  --accent-soft: rgba(169, 205, 232, 0.12);
+  --wash: rgba(170, 205, 255, 0.16);
 }
 
 [data-theme="dark"][data-season="spring"] {

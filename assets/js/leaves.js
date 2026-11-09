@@ -24,7 +24,7 @@
   var CFG = {
     sakura: {
       colors: ['#f7c6d5', '#fbdce6', '#f2b3c7', '#fde9f0', '#f9d2de'],
-      size: [3.5, 7], vy: [0.10, 0.36], sway: [16, 46], alpha: [0.55, 0.9],
+      size: [4, 8], vy: [0.10, 0.36], sway: [16, 46], alpha: [0.65, 0.95],
       step: 30, min: 24, max: 62
     },
     firefly: {
@@ -39,7 +39,7 @@
     },
     snow: {
       colors: ['#ffffff', '#eef5ff', '#dbe8fb'],
-      size: [2, 4.6], vy: [0.18, 0.75], sway: [8, 28], alpha: [0.75, 1],
+      size: [2.2, 5], vy: [0.18, 0.72], sway: [8, 30], alpha: [0.8, 1],
       step: 20, min: 34, max: 96
     }
   };
