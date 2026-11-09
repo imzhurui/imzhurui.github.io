@@ -33,17 +33,90 @@
   color-scheme: dark;
 }
 
-/* ---------------- 四季：只换强调色 ---------------- */
+/* ---------------- 四季：底色、墨色、强调色都换 ----------------
+   冬天整页转深，雪才看得见 */
 
-[data-season="spring"] { --accent: #a8557a; --accent-soft: rgba(168, 85, 122, 0.07); --wash: rgba(168, 85, 122, 0.05); }
-[data-season="summer"] { --accent: #2d6a8f; --accent-soft: rgba(45, 106, 143, 0.07); --wash: rgba(45, 106, 143, 0.05); }
-[data-season="autumn"] { --accent: #6a5a9e; --accent-soft: rgba(106, 90, 158, 0.07); --wash: rgba(106, 90, 158, 0.05); }
-[data-season="winter"] { --accent: #3d6f8c; --accent-soft: rgba(61, 111, 140, 0.07); --wash: rgba(61, 111, 140, 0.05); }
+[data-season="spring"] {
+  --paper: #fef8fa;
+  --paper-2: #f8f0fb;
+  --rule: #ece3ea;
+  --accent: #a8557a;
+  --accent-soft: rgba(168, 85, 122, 0.07);
+  --wash: rgba(236, 150, 190, 0.16);
+}
 
-[data-theme="dark"][data-season="spring"] { --accent: #d78fae; --accent-soft: rgba(215, 143, 174, 0.12); --wash: rgba(215, 143, 174, 0.07); }
-[data-theme="dark"][data-season="summer"] { --accent: #82b6d6; --accent-soft: rgba(130, 182, 214, 0.12); --wash: rgba(130, 182, 214, 0.07); }
-[data-theme="dark"][data-season="autumn"] { --accent: #a99ad6; --accent-soft: rgba(169, 154, 214, 0.12); --wash: rgba(169, 154, 214, 0.07); }
-[data-theme="dark"][data-season="winter"] { --accent: #8fb8d4; --accent-soft: rgba(143, 184, 212, 0.12); --wash: rgba(143, 184, 212, 0.07); }
+[data-season="summer"] {
+  --paper: #f5fbff;
+  --paper-2: #ecf4fb;
+  --rule: #dfe9f2;
+  --accent: #2d6a8f;
+  --accent-soft: rgba(45, 106, 143, 0.07);
+  --wash: rgba(120, 190, 235, 0.16);
+}
+
+[data-season="autumn"] {
+  --paper: #fbfaf8;
+  --paper-2: #f4f3f6;
+  --rule: #e7e5e6;
+  --accent: #6a5a9e;
+  --accent-soft: rgba(106, 90, 158, 0.07);
+  --wash: rgba(150, 135, 205, 0.14);
+}
+
+[data-season="winter"] {
+  --paper: #1c2632;
+  --paper-2: #131b24;
+  --ink: #e9eff7;
+  --muted: #9dafc2;
+  --rule: #2d3947;
+  --accent: #9cc3e0;
+  --accent-soft: rgba(156, 195, 224, 0.12);
+  --wash: rgba(170, 210, 255, 0.14);
+}
+
+[data-theme="dark"][data-season="spring"] {
+  --paper: #151220;
+  --paper-2: #1b1526;
+  --ink: #ece7f2;
+  --muted: #a89cb0;
+  --rule: #2a2233;
+  --accent: #d78fae;
+  --accent-soft: rgba(215, 143, 174, 0.12);
+  --wash: rgba(215, 143, 174, 0.08);
+}
+
+[data-theme="dark"][data-season="summer"] {
+  --paper: #0c1720;
+  --paper-2: #0f1e29;
+  --ink: #e4eef5;
+  --muted: #93a7b5;
+  --rule: #1e2f3c;
+  --accent: #7fc4e8;
+  --accent-soft: rgba(127, 196, 232, 0.12);
+  --wash: rgba(90, 160, 210, 0.10);
+}
+
+[data-theme="dark"][data-season="autumn"] {
+  --paper: #121020;
+  --paper-2: #171428;
+  --ink: #e8e6f2;
+  --muted: #9d99b3;
+  --rule: #232038;
+  --accent: #a99ad6;
+  --accent-soft: rgba(169, 154, 214, 0.12);
+  --wash: rgba(140, 120, 210, 0.10);
+}
+
+[data-theme="dark"][data-season="winter"] {
+  --paper: #0a0f16;
+  --paper-2: #0d141d;
+  --ink: #e6eef8;
+  --muted: #93a6ba;
+  --rule: #1d2836;
+  --accent: #a9cde8;
+  --accent-soft: rgba(169, 205, 232, 0.12);
+  --wash: rgba(150, 195, 255, 0.12);
+}
 
 *,
 *::before,
